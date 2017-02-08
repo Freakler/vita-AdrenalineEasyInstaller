@@ -43,11 +43,6 @@ int copyFile(char *src_path, char *dst_path) { //thx Flow VitaShell
 	int read;
 	while ((read = sceIoRead(fdsrc, buf, TRANSFER_SIZE)) > 0) {
 		sceIoWrite(fddst, buf, read);
-
-			sceIoClose(fddst);
-			sceIoClose(fdsrc);
-
-			return 0;
 	}
 
 	free(buf);
@@ -55,7 +50,7 @@ int copyFile(char *src_path, char *dst_path) { //thx Flow VitaShell
 	sceIoClose(fddst);
 	sceIoClose(fdsrc);
 
-	return 1;
+	return 0;
 }
 
 
