@@ -269,3 +269,11 @@ int check_for_psp_content(char *path) { //returns number of valid PSP games in *
 	return 0;
 }
 
+void trigger_update_database() {
+
+	sceIoRemove("ux0:id.dat");
+	
+	SceUID id = sceIoOpen("ux0:id.dat", SCE_O_WRONLY|SCE_O_CREAT, 0777);
+	sceIoWrite(id, NULL, 0x0);
+	sceIoClose(id);
+}

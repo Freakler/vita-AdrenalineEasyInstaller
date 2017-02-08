@@ -30,4 +30,6 @@ int write_adrenaline_to_config(char *id);
 int delete_adrenaline_from_config(char *id);
 int check_for_psp_content(char *path);
 
+void trigger_update_database();
+
 #endif

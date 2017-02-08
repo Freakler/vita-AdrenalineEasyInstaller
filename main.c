@@ -698,10 +698,10 @@ void install_adrenaline_files(char *id) {
 
 	while (1) {
 		readPad();
-
 		if (pressed_buttons & SCE_CTRL_ENTER) {
-			sceIoRemove("ux0:id.dat"); //for triggering "updating database"
+			trigger_update_database(); //for triggering "updating database"
 			scePowerRequestColdReset();
+			//if (pressed_buttons & SCE_CTRL_CANCEL) sceKernelExitProcess(0);
 		}	
 	}		
 }
@@ -753,12 +753,11 @@ void uninstall_adrenaline_files(char *id) {
 		
 		while (1) {
 			readPad();
-
 			if (pressed_buttons & SCE_CTRL_ENTER) {
-				sceIoRemove("ux0:id.dat"); //for triggering "updating database"
+				trigger_update_database(); //for triggering "updating database"
 				scePowerRequestColdReset();
 			}	
-			if (pressed_buttons & SCE_CTRL_CANCEL) sceKernelExitProcess(0);
+			//if (pressed_buttons & SCE_CTRL_CANCEL) sceKernelExitProcess(0);
 		}
 		
 }
@@ -964,7 +963,7 @@ void uninstall_theme_files(char *id) {
 		while (1) {
 			readPad();
 			if (pressed_buttons & SCE_CTRL_ENTER) {
-				sceIoRemove("ux0:id.dat"); //for triggering "updating database"
+				trigger_update_database(); //for triggering "updating database"
 				scePowerRequestColdReset();
 			}	
 			//if (pressed_buttons & SCE_CTRL_CANCEL) sceKernelExitProcess(0);
