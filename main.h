@@ -7,6 +7,8 @@
 
 #include <psp2/kernel/processmgr.h>
 #include <psp2/ctrl.h>					//for button input
+//#include <psp2/power.h>					//for battery percentage
+//#include <psp2/shellutil.h>				//for blocking home button
 
 #include <vita2d.h>
 #include <psp2/display.h>				//for sceDisplayWaitVblankStart();
@@ -23,8 +25,10 @@
 #define TEXT_SIZE 1.0f
 
 #define TITLE "Adrenaline EasyInstaller"
-#define VERSION "1.03"
+#define VERSION "1.04"
 
+#define DEFAULT_BASEGAME "NPEZ00104"
+#define UPDATE_LINK "http://du01.psp.update.playstation.org/update/psp/image/us/2014_1212_6be8878f475ac5b1a499b95ab2f7d301/EBOOT.PBP"
 
 SceCtrlData pad;
 uint32_t old_buttons, current_buttons, pressed_buttons, hold_buttons, hold2_buttons, released_buttons;
@@ -66,18 +70,41 @@ typedef struct {
 	
 
 /// Functions /////////////////////////////////////////////////////////////////	
-void readPad();
+int vshSblAimgrIsVITA();
 void scePowerRequestColdReset();
+
+void readPad();
 	
 int system_check();
 void draw_recovery_menu();
 
-void *draw_psp_games();
-void *uninstall_adrenaline();
-void *install_theme();
-void *uninstall_theme();
+	//recovery_menu
+	void *draw_psp_games();
+	void *uninstall_adrenaline();
+	void *theme_options();
+	void *more_options();
 
-int drawdialog(const char* message);
+	
+void draw_submenu(Menu *sub_menu, const char* title);
+
+	//theme_menu
+	void *install_theme();
+	void *uninstall_theme();
+	
+	//more_menu
+	void *install_pspgame();
+	int *option_delete_pbp();
+	int *option_delete_flash();
+	int *option_rebuildDatabase();
+	int *option_updateDatabase();
+	int *option_reboot();	
+	
+
+int drawdialog(const char* message, const char* message2);
+int drawmessage(const char* message, const char* button_text);
+int drawstatusmessage(const char* message);
+
+void install_psp_basegame();
 
 void install_adrenaline_files(char *id);
 void uninstall_adrenaline_files(char *path);

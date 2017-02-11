@@ -2,14 +2,14 @@ TITLE_ID = ADRINSTAL
 TARGET   = EasyInstaller
 OBJS     = main.o font.o graphics.o init.o file.o
 
-PSVITAIP = 192.168.0.109
+PSVITAIP = 192.168.0.110
 
 RESOURCES_PNG = materials/button_pad.png materials/button_cross.png materials/button_circle.png
 OBJS += $(RESOURCES_PNG:.png=.o)
 
 LIBS = -lvita2d -lSceKernel_stub -lScePower_stub -lSceDisplay_stub -lSceGxm_stub -lSceAppUtil_stub -lSceAppMgr_stub \
 	-lSceSysmodule_stub -lSceCtrl_stub -lScePgf_stub -lSceHttp_stub -lSceNet_stub -lSceNetCtl_stub\
-	-lSceCommonDialog_stub -lfreetype -lpng -ljpeg -lz -lm -lc
+	-lSceCommonDialog_stub -lSceVshBridge_stub -lfreetype -lpng -ljpeg -lz -lm -lc
 
 PREFIX  = arm-vita-eabi
 CC      = $(PREFIX)-gcc
@@ -32,6 +32,16 @@ all: $(TARGET).vpk
       -a files/startup.png=files/startup.png \
       -a files/template.xml=files/template.xml \
       -a files/PBOOT.PBP=files/PBOOT.PBP \
+      -a files/basegame/d0.pdb=files/basegame/bgdl/d0.pdb \
+      -a files/basegame/d1.pdb=files/basegame/bgdl/d1.pdb \
+      -a files/basegame/f0.pdb=files/basegame/bgdl/f0.pdb \
+      -a files/basegame/icon.png=files/basegame/bgdl/icon.png \
+      -a files/basegame/body.bin=files/basegame/pspemu/body.bin \
+      -a files/basegame/head.bin=files/basegame/pspemu/head.bin \
+      -a files/basegame/stat.bin=files/basegame/pspemu/stat.bin \
+      -a files/basegame/tail.bin=files/basegame/pspemu/tail.bin \
+      -a files/basegame/work.bin=files/basegame/pspemu/work.bin \
+      -a files/basegame/EBOOT.PBP=files/basegame/pspemu/EBOOT.PBP \
       $@
 	  
 eboot.bin: $(TARGET).velf
