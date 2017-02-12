@@ -37,35 +37,34 @@
 
 
 
-
 /// Main Menu /////////////
 Menu recovery_menu[] = {
-	//*title						//type				//*function					//*message
-	{"1. Install Adrenaline eCFW"		, MENU_BLOCKED		, draw_psp_games			, "* Install 6.61 Adrenaline eCFW to a Basegame of your choice" 		},
+	//*title				//type			//*function			//*message
+	{"1. Install Adrenaline eCFW"		, MENU_BLOCKED		, draw_psp_games		, "* Install 6.61 Adrenaline eCFW to a Basegame of your choice" 		},
 	{"2. Uninstall Adrenaline eCFW"		, MENU_BLOCKED		, uninstall_adrenaline		, "* Remove Adrenaline from this device" 								},
-	{"3. Theming Options"				, MENU_BLOCKED		, theme_options				, "* Access theming options menu"										},
-	{"4. Advanced Options"				, MENU_ACTIVE 		, more_options				, "* Access advanced options menu" 										},
-	{"5. Exit"							, MENU_EXIT 		, NULL						, "* Exit EasyInstaller" 												},
+	{"3. Theming Options"			, MENU_BLOCKED		, theme_options			, "* Access theming options menu"										},
+	{"4. Advanced Options"			, MENU_ACTIVE 		, more_options			, "* Access advanced options menu" 										},
+	{"5. Exit"				, MENU_EXIT 		, NULL				, "* Exit EasyInstaller" 												},
 	{NULL,0,"",""}
 };
 
 Menu theme_menu[] = {
-	//*title							//type				//*function					//*message
-	{"Add Custom LiveArea Theme"		, MENU_BLOCKED		, install_theme				, "* Add a custom LiveArea Theme (optional)"							},
-	{"Restore LiveArea Theme"			, MENU_BLOCKED		, uninstall_theme			, "* Remove the custom LiveArea Theme and restore the default look"		},
-	{"back"								, MENU_EXIT 		, NULL						, "" 	},
+	//*title				//type			//*function			//*message
+	{"Add Custom LiveArea Theme"		, MENU_BLOCKED		, install_theme			, "* Add a custom LiveArea Theme (optional)"							},
+	{"Restore LiveArea Theme"		, MENU_BLOCKED		, uninstall_theme		, "* Remove the custom LiveArea Theme and restore the default look"		},
+	{"back"					, MENU_EXIT 		, NULL				, "" 	},
 	{NULL,0,"",""}
 };
 
 Menu more_menu[] = {
-	//*title									//type				//*function					//*message
-	{"Install a small PSP Basegame if needed"	, MENU_BLOCKED		, install_pspgame			, "" 	},
+	//*title					//type			//*function			//*message
+	{"Install a small PSP Basegame if needed"	, MENU_BLOCKED		, install_pspgame		, "" 	},
 	{"Delete installed Adrenaline flash files"	, MENU_BLOCKED		, option_delete_flash		, ""	},
-	{"Delete 661.PBP update file"				, MENU_BLOCKED		, option_delete_pbp			, ""	},
-	{"Rebuild Database"							, MENU_ACTIVE		, option_rebuildDatabase	, "" 	},
-	{"Update Database"							, MENU_ACTIVE		, option_updateDatabase		, "" 	},
-	//{"Reboot System"							, MENU_ACTIVE		, option_reboot				, "" 	},
-	{"back"										, MENU_EXIT 		, NULL						, "" 	},
+	{"Delete 661.PBP update file"			, MENU_BLOCKED		, option_delete_pbp		, ""	},
+	{"Rebuild Database"				, MENU_ACTIVE		, option_rebuildDatabase	, "" 	},
+	{"Update Database"				, MENU_ACTIVE		, option_updateDatabase		, "" 	},
+	//{"Reboot System"				, MENU_ACTIVE		, option_reboot			, "" 	},
+	{"back"						, MENU_EXIT 		, NULL				, "" 	},
 	{NULL,0,"",""}
 };
 	
