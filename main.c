@@ -141,7 +141,7 @@ int system_check() {
 		
 		//Check for DEFAULT_BASEGAME already installed
 		sprintf(temp, "ux0:pspemu/PSP/GAME/%s", DEFAULT_BASEGAME); 
-		if ( !doesDirExist(temp) > 0 ) {
+		if ( doesDirExist(temp) == 0 ) {
 			more_menu[0].type = MENU_ACTIVE; //activate option
 		}
 		
