@@ -331,7 +331,11 @@ int write_adrenaline_to_config(char *id) {
 	} else {
 		
 		while (fgets(buffer, sizeof(buffer), file) != NULL) {
-			fprintf(temp, "%s", buffer);
+			if ( buffer[0] != '\n' ) { //empty row fix			
+				fprintf(temp, "%s", buffer);
+			}
+				
+				if ( buffer[strlen(buffer)-1] != '\n' ) fprintf(temp, "\n"); //whitespaces fix
 			
 			if( (strstr(buffer, "*KERNEL")) != NULL ) {
 				fprintf(temp, "ux0:pspemu/adrenaline/adrenaline.skprx\n");
