@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<changeinfo>
+  <changes app_ver="01.00">
+    <![CDATA[
+- Initial release.<br>
+    ]]>
+  </changes>
+  <changes app_ver="01.03">
+    <![CDATA[
+- added automatic 661.PBP downloading<br>
+- merged additional checks by Yoti<br>
+- adjusted debug text length<br>
+- code cleaned & bugs fixed<br>
+    ]]>
+  </changes>
+  <changes app_ver="01.04">
+    <![CDATA[
+- added PSP names in selection menu<br>
+- changed method to update database (addressed to bugs reported)<br>
+- added another safety dialog before actually installing Adrenaline<br>
+- added more message screens<br>
+- added option to install a small basegame (thx to CelesteBlue for the files)<br>
+- added option to delete adrenaline flash files<br>
+- added option to delete 661 Update file<br>
+- bugs fixed<br>
+    ]]>
+  </changes>
+  <changes app_ver="01.05">
+    <![CDATA[
+- added 6.61 Update file download progress indicator<br>
+- added update history info to livearea<br>
+- while installing the Home button is now blocked<br>
+- fixed a bug with wrongly formatted tai-config files<br>
+    ]]>
+  </changes>
+</changeinfo>
