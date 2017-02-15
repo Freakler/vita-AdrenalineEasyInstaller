@@ -2,14 +2,14 @@ TITLE_ID = ADRINSTAL
 TARGET   = EasyInstaller
 OBJS     = main.o font.o graphics.o init.o file.o
 
-PSVITAIP = 192.168.0.110
+PSVITAIP = 192.168.0.111
 
 RESOURCES_PNG = materials/button_pad.png materials/button_cross.png materials/button_circle.png
 OBJS += $(RESOURCES_PNG:.png=.o)
 
-LIBS = -lvita2d -lSceKernel_stub -lScePower_stub -lSceDisplay_stub -lSceGxm_stub -lSceAppUtil_stub -lSceAppMgr_stub \
+LIBS = -lvita2d -lScePower_stub -lSceLibKernel_stub -lSceDisplay_stub -lSceGxm_stub -lSceAppUtil_stub -lSceAppMgr_stub \
 	-lSceSysmodule_stub -lSceCtrl_stub -lScePgf_stub -lSceHttp_stub -lSceNet_stub -lSceNetCtl_stub\
-	-lSceCommonDialog_stub -lSceVshBridge_stub -lfreetype -lpng -ljpeg -lz -lm -lc
+	-lSceCommonDialog_stub -lSceVshBridge_stub -lSceShellSvc_stub -lfreetype -lpng -ljpeg -lz -lm -lc
 
 PREFIX  = arm-vita-eabi
 CC      = $(PREFIX)-gcc
@@ -25,6 +25,7 @@ all: $(TARGET).vpk
       -a livearea/template.xml=sce_sys/livearea/contents/template.xml \
       -a livearea/startup.png=sce_sys/livearea/contents/startup.png \
       -a livearea/bg0.png=sce_sys/livearea/contents/bg0.png \
+      -a livearea/changeinfo.xml=sce_sys/changeinfo/changeinfo.xml \
       -a files/adrenaline.skprx=files/adrenaline.skprx \
       -a files/adrenaline.suprx=files/adrenaline.suprx \
       -a files/icon0.dds=files/icon0.dds \

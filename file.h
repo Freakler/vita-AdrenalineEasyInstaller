@@ -12,8 +12,11 @@
 #include <psp2/net/net.h>
 #include <psp2/net/netctl.h>
 
+#define printf psvDebugScreenPrintf
+
 #define TRANSFER_SIZE 64 * 1024 //64kb
 #define MAX_PATH_LENGTH 1024
+
 
 char PSP_GAME_ID[32];
 
@@ -28,7 +31,10 @@ char *getEbootTitle(char *src_path);
 
 int doesFileExist(const char* path);
 int doesDirExist(const char* path);
+
 int copyFile(char *src_path, char *dst_path);
+
+int makePath(const char *dir);
 int removePath(char *path);
 
 int download_file(const char *src, const char *dst);
@@ -40,4 +46,6 @@ int check_for_psp_content(char *path);
 
 void trigger_update_database();
 void trigger_rebuild_database();
+
+int writeChangeinfo(const char* id);
 #endif

@@ -170,6 +170,30 @@ int copyFile(char *src_path, char *dst_path) { //thx Flow VitaShell
 	return 0;
 }
 
+int makePath(const char *dir) { //thx molecule
+	char dir_copy[0x400] = {0};
+	snprintf(dir_copy, sizeof(dir_copy) - 2, "%s", dir);
+	dir_copy[strlen(dir_copy)] = '/';
+	char *c;
+	
+	for (c = dir_copy; *c; ++c) {
+		if (*c == '/') {
+			*c = '\0';
+			sceIoMkdir(dir_copy, 0777);
+			*c = '/';
+		}
+	}
+	
+	//test
+	SceUID test = sceIoDopen(dir); 
+ 	if (test >= 0) { 
+ 		sceIoDclose(test); 
+ 		return 0; //success
+ 	} else { 
+ 		return 1; 
+ 	} 
+}
+
 int removePath(char *path) {  //thx Flow VitaShell
 	SceUID dfd = sceIoDopen(path);
 	if (dfd >= 0) {
@@ -224,25 +248,28 @@ int removePath(char *path) {  //thx Flow VitaShell
 
 
 int download_file(const char *src, const char *dst) { //thx molecule offline installer
+		
 	int ret;
+	int coord = psvDebugScreenGetX(); //save current position of screen once
+	
 	int tpl = sceHttpCreateTemplate("henkaku offline", 2, 1);
 	if (tpl < 0) {
-		//printf("sceHttpCreateTemplate: 0x%x\n", tpl);
+		printf("sceHttpCreateTemplate: 0x%x\n", tpl);
 		return tpl;
 	}
 	int conn = sceHttpCreateConnectionWithURL(tpl, src, 0);
 	if (conn < 0) {
-		//printf("sceHttpCreateConnectionWithURL: 0x%x\n", conn);
+		printf("sceHttpCreateConnectionWithURL: 0x%x\n", conn);
 		return conn;
 	}
 	int req = sceHttpCreateRequestWithURL(conn, 0, src, 0);
 	if (req < 0) {
-		//printf("sceHttpCreateRequestWithURL: 0x%x\n", req);
+		printf("sceHttpCreateRequestWithURL: 0x%x\n", req);
 		return req;
 	}
 	ret = sceHttpSendRequest(req, NULL, 0);
 	if (ret < 0) {
-		//printf("sceHttpSendRequest: 0x%x\n", ret);
+		printf("sceHttpSendRequest: 0x%x\n", ret);
 		return ret;
 	}
 	unsigned char buf[4096] = {0};
@@ -253,18 +280,15 @@ int download_file(const char *src, const char *dst) { //thx molecule offline ins
 	int fd = sceIoOpen(dst, SCE_O_WRONLY | SCE_O_CREAT | SCE_O_TRUNC, 6);
 	int total_read = 0;
 	if (fd < 0) {
-		//printf("sceIoOpen: 0x%x\n", fd);
+		printf("sceIoOpen: 0x%x\n", fd);
 		return fd;
 	}
-	// draw progress bar background
-	//fg_color = 0xFF666666;
-	//draw_rect(psvDebugScreenGetX(), psvDebugScreenGetY(), PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT);
-	//fg_color = 0xFFFFFFFF;
+
 	while (1) {
 		int read = sceHttpReadData(req, buf, sizeof(buf));
 		
 		if (read < 0) {
-			//printf("sceHttpReadData error! 0x%x\n", read);
+			printf("sceHttpReadData error! 0x%x\n", read);
 			return read;
 		}
 		
@@ -272,18 +296,20 @@ int download_file(const char *src, const char *dst) { //thx molecule offline ins
 			
 		ret = sceIoWrite(fd, buf, read);
 		if (ret < 0 || ret != read) {
-			//printf("sceIoWrite error! 0x%x\n", ret);
+			printf("sceIoWrite error! 0x%x\n", ret);
 			if (ret < 0)
 				return ret;
 			return -1;
 		}
 		total_read += read;
-		//draw_rect(psvDebugScreenGetX() + 1, psvDebugScreenGetY() + 1, (PROGRESS_BAR_WIDTH - 2) * total_read / length, PROGRESS_BAR_HEIGHT - 2);
+
+			psvDebugScreenSetXY( coord, psvDebugScreenGetY() );
+			printf("(%i bytes) ", total_read);
 	}
-	printf("\n\n");
+
 	ret = sceIoClose(fd);
-	//if (ret < 0)
-		//printf("sceIoClose: 0x%x\n", ret);
+	if (ret < 0)
+		printf("sceIoClose: 0x%x\n", ret);
 
 	return 0;
 }
@@ -321,6 +347,7 @@ const char *get_id_of_psp_game_that_adrenaline_is_installed_to() { //return PSP 
 int write_adrenaline_to_config(char *id) {
 	
 	char buffer[1024];
+	
 	FILE *file = fopen("ux0:tai/config.txt", "r");
 	FILE *temp = fopen("ux0:tai/temp.txt", "w");
 	
@@ -331,6 +358,7 @@ int write_adrenaline_to_config(char *id) {
 	} else {
 		
 		while (fgets(buffer, sizeof(buffer), file) != NULL) {
+			
 			if ( buffer[0] != '\n' ) { //empty row fix			
 				fprintf(temp, "%s", buffer);
 			}
@@ -341,6 +369,8 @@ int write_adrenaline_to_config(char *id) {
 				fprintf(temp, "ux0:pspemu/adrenaline/adrenaline.skprx\n");
 			}
 		}
+		
+		
 		
 		//end of file (append the rest)
 		fprintf(temp, "*%s\n", id);
@@ -502,3 +532,22 @@ void trigger_rebuild_database() {
 		
 	sceIoRemove("ur0:shell/db/app.db");
 }
+
+int writeChangeinfo(const char* id) { // return  1 on success
+
+	char temp_buffer[256];
+	int ret;
+	
+	sprintf(temp_buffer, "ux0:patch/%s/sce_sys/changeinfo", id);
+	ret = makePath(temp_buffer); //0 on success
+	
+	if ( ret == 0 ) { //if success
+		sprintf(temp_buffer, "ux0:patch/%s/sce_sys/changeinfo/changeinfo.xml", id);
+		ret = copyFile("app0:sce_sys/changeinfo/changeinfo.xml", temp_buffer); //0 on success
+	
+		if ( ret == 0 ) return 1; //success
+	}
+	
+	return 0;	
+}
+

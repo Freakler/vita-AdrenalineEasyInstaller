@@ -4,21 +4,25 @@
 
 /* Notes & TODO
 * - add sqlite method for the theme maybe?!
-* - block PS button on install maybe?!
-* - add progress indicator to 661 download
-* - add check for right size of 661 pbp
+* - add check for right size of 661 pbp (32580549 bytes)
+* -
 * -
 *
-* "Ultra-Secret-Debug-Info-Mesages"-combo is: LEFT + L-TRIGGER + R-TRIGGER + START 
 */ 
 
 /** Changelog 
+* v1.05
+* - added 6.61 Update file download progress indicator
+* - added update history info to livearea
+* - while installing the Home button is now blocked
+* - fixed a bug with wrongly formatted tai-config files
+*
 * v1.04
 * - added PSP names in selection menu
 * - changed method to update database (addressed to bugs reported)
 * - added another safety dialog before actually installing Adrenaline
 * - added more message screens
-* - added option to install a small basegame (thx to CeleseteBlue for the files)
+* - added option to install a small basegame (thx to CelesteBlue for the files)
 * - added option to delete adrenaline flash files
 * - added option to delete 661 Update file
 * - bugs fixed
@@ -32,39 +36,40 @@
 * -
 *
 * v1.02
-* - bug fixes
+* - bugs fixed
 */
+
 
 
 
 /// Main Menu /////////////
 Menu recovery_menu[] = {
-	//*title				//type			//*function			//*message
-	{"1. Install Adrenaline eCFW"		, MENU_BLOCKED		, draw_psp_games		, "* Install 6.61 Adrenaline eCFW to a Basegame of your choice" 		},
+	//*title						//type				//*function					//*message
+	{"1. Install Adrenaline eCFW"		, MENU_BLOCKED		, draw_psp_games			, "* Install 6.61 Adrenaline eCFW to a Basegame of your choice" 		},
 	{"2. Uninstall Adrenaline eCFW"		, MENU_BLOCKED		, uninstall_adrenaline		, "* Remove Adrenaline from this device" 								},
-	{"3. Theming Options"			, MENU_BLOCKED		, theme_options			, "* Access theming options menu"										},
-	{"4. Advanced Options"			, MENU_ACTIVE 		, more_options			, "* Access advanced options menu" 										},
-	{"5. Exit"				, MENU_EXIT 		, NULL				, "* Exit EasyInstaller" 												},
+	{"3. Theming Options"				, MENU_BLOCKED		, theme_options				, "* Access theming options menu"										},
+	{"4. Advanced Options"				, MENU_ACTIVE 		, more_options				, "* Access advanced options menu" 										},
+	{"5. Exit"							, MENU_EXIT 		, NULL						, "* Exit EasyInstaller" 												},
 	{NULL,0,"",""}
 };
 
 Menu theme_menu[] = {
-	//*title				//type			//*function			//*message
-	{"Add Custom LiveArea Theme"		, MENU_BLOCKED		, install_theme			, "* Add a custom LiveArea Theme (optional)"							},
-	{"Restore LiveArea Theme"		, MENU_BLOCKED		, uninstall_theme		, "* Remove the custom LiveArea Theme and restore the default look"		},
-	{"back"					, MENU_EXIT 		, NULL				, "" 	},
+	//*title							//type				//*function					//*message
+	{"Add Custom LiveArea Theme"		, MENU_BLOCKED		, install_theme				, "* Add a custom LiveArea Theme (optional)"							},
+	{"Restore LiveArea Theme"			, MENU_BLOCKED		, uninstall_theme			, "* Remove the custom LiveArea Theme and restore the default look"		},
+	{"back"								, MENU_EXIT 		, NULL						, "" 	},
 	{NULL,0,"",""}
 };
 
 Menu more_menu[] = {
-	//*title					//type			//*function			//*message
-	{"Install a small PSP Basegame if needed"	, MENU_BLOCKED		, install_pspgame		, "" 	},
+	//*title									//type				//*function					//*message
+	{"Install a small PSP Basegame if needed"	, MENU_BLOCKED		, install_pspgame			, "" 	},
 	{"Delete installed Adrenaline flash files"	, MENU_BLOCKED		, option_delete_flash		, ""	},
-	{"Delete 661.PBP update file"			, MENU_BLOCKED		, option_delete_pbp		, ""	},
-	{"Rebuild Database"				, MENU_ACTIVE		, option_rebuildDatabase	, "" 	},
-	{"Update Database"				, MENU_ACTIVE		, option_updateDatabase		, "" 	},
-	//{"Reboot System"				, MENU_ACTIVE		, option_reboot			, "" 	},
-	{"back"						, MENU_EXIT 		, NULL				, "" 	},
+	{"Delete 661.PBP update file"				, MENU_BLOCKED		, option_delete_pbp			, ""	},
+	{"Rebuild Database"							, MENU_ACTIVE		, option_rebuildDatabase	, "" 	},
+	{"Update Database"							, MENU_ACTIVE		, option_updateDatabase		, "" 	},
+	//{"Reboot System"							, MENU_ACTIVE		, option_reboot				, "" 	},
+	{"back"										, MENU_EXIT 		, NULL						, "" 	},
 	{NULL,0,"",""}
 };
 	
@@ -83,18 +88,19 @@ int system_check() {
 	/// Model Check
 	printf("Model check: ");
 	if ( vshSblAimgrIsVITA() == 1 ) printf("Vita\n\n");
-	else {
-		printf("PlayStationTV\n\n");
-		//deactivate Game installing here
-	}	
+	else printf("PlayStationTV\n\n");
 	
 	/// Enter Button check
 	printf("Enter Button = ");
 	if ( SCE_CTRL_ENTER == SCE_CTRL_CROSS ) printf("X\n\n");
-	else printf("O\n\n");		
+	else printf("O\n\n");
 	
-	printf("\n");		
+	/// Write Changeinfo for Livearea manually. (Does vpk promoting not feature this? [https://www.vitadevwiki.com/index.php?title=File:PKGdirstruct.png] Deleteing the bubble will delete patch/xxx though) 
+	printf("Writing changeinfo.xml.. ");
+	if ( writeChangeinfo(TITLEID) ) print_color("OK\n\n", GREEN);
+	else print_color("Error\n\n", RED);
 	
+		printf("\n");		
 	
 	/// taiHENkaku check
 	printf("Checking for taiHENkaku.. ");
@@ -147,19 +153,7 @@ int system_check() {
 		
 	} else {
 		print_color("No content!!\n\n", YELLOW);
-		
 		more_menu[0].type = MENU_ACTIVE; //unblock basegame install here
-			
-			/**old
-			print_color("\n!!! Please install any PSP Game/Demo first !!!\n\n", RED);
-		
-			if ( SCE_CTRL_ENTER == SCE_CTRL_CROSS ) printf("Press X to exit..\n\n");
-			else printf("Press O to exit..\n\n");
-		
-			while (1) {
-				readPad();
-				if (pressed_buttons & SCE_CTRL_ENTER) return 0;
-			}**/
 	}
 		
 	
@@ -213,7 +207,10 @@ int system_check() {
 	/// check for 661.PBP
 	printf("Checking for 661.PBP.. ");	
 	if ( doesFileExist("ux0:pspemu/adrenaline/661.PBP") ) {
-		print_color("Found!!\n\n", GREEN);	
+		print_color("Found!!\n\n", GREEN);
+		
+		//add check here for correct/complete update file
+		
 		more_menu[2].type = MENU_ACTIVE; //activate "Delete Update PBP"
 		
 	} else {
@@ -456,6 +453,7 @@ void *uninstall_adrenaline() {
 	int ret = drawdialog("Do you really want to continue uninstalling Adrenaline?","");
 	if ( ret ) {
 		closeVita2DLib(); //shutdown Vita2dLib
+		lock_psbutton();
 		uninstall_adrenaline_files(PSP_GAME_ID);
 	}
 	
@@ -580,7 +578,8 @@ void *draw_psp_games() {
 			
 				int ret = drawdialog(content_array[selection].title, "Do you really want to continue installing to this Game?");
 				if ( ret ) {
-					closeVita2DLib(); //shutdown Vita2dLib	
+					closeVita2DLib(); //shutdown Vita2dLib
+					lock_psbutton();
 					install_adrenaline_files(content_array[selection].titleID);
 				}
 
@@ -596,10 +595,7 @@ void *draw_psp_games() {
 
 void *theme_options() {
 	
-	//
-	
 	draw_submenu(theme_menu, "Themeing Options");
-	
 	return 0;
 }
 
@@ -608,6 +604,7 @@ void *install_theme() {
 	int ret = drawdialog("Do you really want to continue installing the theme?","");
 	if ( ret ) {
 		closeVita2DLib(); //shutdown Vita2dLib
+		lock_psbutton();
 		install_theme_files(PSP_GAME_ID);
 	}
 	
@@ -619,6 +616,7 @@ void *uninstall_theme() {
 	int ret = drawdialog("Do you really want to restore the original livearea theme?","");
 	if ( ret ) {
 		closeVita2DLib(); //shutdown Vita2dLib
+		lock_psbutton();
 		uninstall_theme_files(PSP_GAME_ID);
 	}
 	
@@ -630,9 +628,8 @@ void *uninstall_theme() {
 
 
 void *more_options() {
-		
+
 	draw_submenu(more_menu, "Advanced Options");
-	
 	return 0;
 }
 
@@ -641,6 +638,7 @@ void *more_options() {
 		int ret = drawdialog("Do you really want to continue installing a PSP Game?","After that you will be able to install Adrenaline to it!");
 		if ( ret ) {
 			closeVita2DLib(); //shutdown Vita2dLib
+			lock_psbutton();
 			install_psp_basegame();
 		}
 	
@@ -1127,6 +1125,8 @@ void install_adrenaline_files(char *id) {
 		}			
 	}
 	
+	//unlock_psbutton();
+	
 	if (SCE_CTRL_ENTER == SCE_CTRL_CROSS) print_color("\n\nDone! Press X to reboot..\n", GREEN); //or O to exit normally..\n", GREEN);
 	else print_color("\n\nDone! Press O to reboot..\n", GREEN); //or X to exit normally..\n", GREEN);
 
@@ -1178,6 +1178,7 @@ void uninstall_adrenaline_files(char *id) {
 	if ( ret == 0 )	print_color("OK\n\n", GREEN);
 	else print_color("ERROR\n\n", RED);
 	
+		//unlock_psbutton();
 	
 		if ( SCE_CTRL_ENTER == SCE_CTRL_CROSS ) {
 			print_color("\n\nDone! Press X to reboot..\n", GREEN); // or O to exit normally..\n", GREEN);
@@ -1228,7 +1229,9 @@ void install_theme_files(char *id) {
 			sceKernelDelayThread(1000 * 1000); // 1 sec
 			print_color("1.. ", YELLOW);
 			sceKernelDelayThread(1000 * 1000); // 1 sec
-			
+		
+		unlock_psbutton();
+		
 		sprintf(temp_buffer, "psgm:play?titleid=%s", id);
 		sceAppMgrLaunchAppByUri(0x20000, temp_buffer); //launch flag 0x40000 | open flag 0x20000
 		
@@ -1242,7 +1245,10 @@ void install_theme_files(char *id) {
 		
 		while (1) {
 			readPad();
-			if (pressed_buttons & SCE_CTRL_ENTER) break;
+			if (pressed_buttons & SCE_CTRL_ENTER) {
+				lock_psbutton();
+				break;
+			}	
 		}
 		
 	} else {
@@ -1313,8 +1319,10 @@ void install_theme_files(char *id) {
 		print_color("Not found!\n", YELLOW);	
 		print_color("It seems you haven't installed Adrenaline via this app!\nThe bubble's name won't change!\n\n", YELLOW);	
 	}	
-	
-		sceKernelDelayThread(1000 * 1000); // 1 sec	for pad conflict maybe
+		
+		//unlock_psbutton();
+		
+		sceKernelDelayThread(1000 * 1000); // 1 sec
 			
 		if ( SCE_CTRL_ENTER == SCE_CTRL_CROSS ) {
 			print_color("\nDone! Press X to reboot..", GREEN); //or O to exit normally..\n", GREEN);
@@ -1415,6 +1423,7 @@ void uninstall_theme_files(char *id) {
 		else print_color("ERROR\n\n", RED);	
 	
 		
+		//unlock_psbutton();
 		
 		if ( SCE_CTRL_ENTER == SCE_CTRL_CROSS ) {
 			print_color("\n\nDone! Press X to reboot..\n", GREEN); // or O to exit normally..\n", GREEN);
@@ -1513,126 +1522,119 @@ void install_psp_basegame() {
 		
 			continue_install:
 		
-		/// make dir
+		/// install in bgdl
 		printf("Creating folder %s.. ", bgdl);
-		ret = sceIoMkdir(bgdl, 0777);
-		if ( ret == 0 )	print_color("OK\n\n", GREEN);	
-		else print_color("ERROR\n\n", RED);	
+		ret = makePath(bgdl);	
+		if ( ret == 0 )	{
+			print_color("OK\n\n", GREEN);	
+	
+			/// d0.pdb
+			sprintf(temp_buffer, "%s/d0.pdb", bgdl);
+			printf("Writing %s.. ", temp_buffer);
+			ret = copyFile("app0:files/basegame/bgdl/d0.pdb", temp_buffer);
+			if ( ret == 0 )	print_color("OK\n", GREEN);	
+			else print_color("ERROR\n", RED);	
+		
+			/// d1.pdb
+			sprintf(temp_buffer, "%s/d1.pdb", bgdl);
+			printf("Writing %s.. ", temp_buffer);
+			ret = copyFile("app0:files/basegame/bgdl/d1.pdb", temp_buffer);
+			if ( ret == 0 )	print_color("OK\n", GREEN);
+			else print_color("ERROR\n", RED);
 			
-		/// d0.pdb
-		sprintf(temp_buffer, "%s/d0.pdb", bgdl);
-		printf("Writing %s.. ", temp_buffer);
-		ret = copyFile("app0:files/basegame/bgdl/d0.pdb", temp_buffer);
-		if ( ret == 0 )	print_color("OK\n", GREEN);	
-		else print_color("ERROR\n", RED);	
-	
-		/// d1.pdb
-		sprintf(temp_buffer, "%s/d1.pdb", bgdl);
-		printf("Writing %s.. ", temp_buffer);
-		ret = copyFile("app0:files/basegame/bgdl/d1.pdb", temp_buffer);
-		if ( ret == 0 )	print_color("OK\n", GREEN);	
-		else print_color("ERROR\n", RED);	
+			/// f0.pdb
+			sprintf(temp_buffer, "%s/f0.pdb", bgdl);
+			printf("Writing %s.. ", temp_buffer);
+			ret = copyFile("app0:files/basegame/bgdl/f0.pdb", temp_buffer);
+			if ( ret == 0 )	print_color("OK\n", GREEN);	
+			else print_color("ERROR\n", RED);	
 		
-		/// f0.pdb
-		sprintf(temp_buffer, "%s/f0.pdb", bgdl);
-		printf("Writing %s.. ", temp_buffer);
-		ret = copyFile("app0:files/basegame/bgdl/f0.pdb", temp_buffer);
-		if ( ret == 0 )	print_color("OK\n", GREEN);	
-		else print_color("ERROR\n", RED);	
-	
-		/// icon.png
-		sprintf(temp_buffer, "%s/icon.png", bgdl);
-		printf("Writing %s.. ", temp_buffer);
-		ret = copyFile("app0:files/basegame/bgdl/icon.png", temp_buffer);
-		if ( ret == 0 )	print_color("OK\n", GREEN);	
-		else print_color("ERROR\n", RED);	
+			/// icon.png
+			sprintf(temp_buffer, "%s/icon.png", bgdl);
+			printf("Writing %s.. ", temp_buffer);
+			ret = copyFile("app0:files/basegame/bgdl/icon.png", temp_buffer);
+			if ( ret == 0 )	print_color("OK\n", GREEN);	
+			else print_color("ERROR\n", RED);	
+			
+			/*/// temp.dat
+			sprintf(temp_buffer, "%s/temp.dat", bgdl);
+			printf("Writing %s.. ", temp_buffer);
+			ret = copyFile("app0:files/basegame/bgdl/temp.dat", temp_buffer);
+			if ( ret == 0 )	print_color("OK\n\n", GREEN);	
+			else print_color("ERROR\n\n", RED);*/
 		
-		/*/// temp.dat
-		sprintf(temp_buffer, "%s/temp.dat", bgdl);
-		printf("Writing %s.. ", temp_buffer);
-		ret = copyFile("app0:files/basegame/bgdl/temp.dat", temp_buffer);
-		if ( ret == 0 )	print_color("OK\n\n", GREEN);	
-		else print_color("ERROR\n\n", RED);*/
+		} else print_color("ERROR\n\n", RED);	
 		
 		
-		/// pspemu bgdl ///////
 		
-		/// make dirs
+		/// install in PSPemu
 		printf("\nCreating folders in %s.. ", pspemu);
 		
-		sceIoMkdir("ux0:pspemu/bgdl", 0777); //make bgdl (unlikely but necessary)
-		sceIoMkdir(pspemu, 0777); //make 00000001
+		sprintf(temp_buffer, "%s/PCSC80018/USRDIR/CONTENT", pspemu);
+		makePath(temp_buffer);
 		
-			sprintf(temp_buffer, "%s/PCSC80018", pspemu);
-			sceIoMkdir(temp_buffer, 0777); //make 00000001/PCSC80018
-		
-				sprintf(temp_buffer, "%s/PCSC80018/sce_sys", pspemu);
-				sceIoMkdir(temp_buffer, 0777); //make 00000001/PCSC80018/sce_sys
-		
-					sprintf(temp_buffer, "%s/PCSC80018/sce_sys/package", pspemu);
-					sceIoMkdir(temp_buffer, 0777); //make 00000001/PCSC80018/sce_sys/package
-		
-				sprintf(temp_buffer, "%s/PCSC80018/USRDIR", pspemu);
-				sceIoMkdir(temp_buffer, 0777); //make 00000001/PCSC80018/USRDIR
-		
-					sprintf(temp_buffer, "%s/PCSC80018/USRDIR/CONTENT", pspemu);
-					ret = sceIoMkdir(temp_buffer, 0777); //make 00000001/PCSC80018/USRDIR/CONTENT
+		sprintf(temp_buffer, "%s/PCSC80018/sce_sys/package", pspemu);
+		ret = makePath(temp_buffer);	
 			
-		if ( ret == 0 )	print_color("OK\n\n", GREEN);	
-		else print_color("ERROR\n\n", RED);	
+		if ( ret == 0 )	{
+			print_color("OK\n\n", GREEN);		
+			
+			/// PCSC80018/sce_sys/package/body.bin
+			sprintf(temp_buffer, "%s/PCSC80018/sce_sys/package/body.bin", pspemu);
+			//printf("Writing %s.. ", temp_buffer);
+			printf("Writing /PCSC80018/sce_sys/package/body.bin.. ");
+			ret = copyFile("app0:files/basegame/pspemu/body.bin", temp_buffer);
+			if ( ret == 0 )	print_color("OK\n", GREEN);	
+			else print_color("ERROR\n", RED);	
+			
+			/// PCSC80018/sce_sys/package/head.bin
+			sprintf(temp_buffer, "%s/PCSC80018/sce_sys/package/head.bin", pspemu);
+			//printf("Writing %s.. ", temp_buffer);
+			printf("Writing /PCSC80018/sce_sys/package/head.bin.. ");
+			ret = copyFile("app0:files/basegame/pspemu/head.bin", temp_buffer);
+			if ( ret == 0 )	print_color("OK\n", GREEN);	
+			else print_color("ERROR\n", RED);	
+			
+			/// PCSC80018/sce_sys/package/stat.bin
+			sprintf(temp_buffer, "%s/PCSC80018/sce_sys/package/stat.bin", pspemu);
+			//printf("Writing %s.. ", temp_buffer);
+			printf("Writing /PCSC80018/sce_sys/package/stat.bin.. ");
+			ret = copyFile("app0:files/basegame/pspemu/stat.bin", temp_buffer);
+			if ( ret == 0 )	print_color("OK\n", GREEN);	
+			else print_color("ERROR\n", RED);	
+			
+			/// PCSC80018/sce_sys/package/tail.bin
+			sprintf(temp_buffer, "%s/PCSC80018/sce_sys/package/tail.bin", pspemu);
+			//printf("Writing %s.. ", temp_buffer);
+			printf("Writing /PCSC80018/sce_sys/package/tail.bin.. ");
+			ret = copyFile("app0:files/basegame/pspemu/tail.bin", temp_buffer);
+			if ( ret == 0 )	print_color("OK\n", GREEN);	
+			else print_color("ERROR\n", RED);	
+			
+			/// PCSC80018/sce_sys/package/work.bin
+			sprintf(temp_buffer, "%s/PCSC80018/sce_sys/package/work.bin", pspemu);
+			//printf("Writing %s.. ", temp_buffer);
+			printf("Writing /PCSC80018/sce_sys/package/work.bin.. ");
+			ret = copyFile("app0:files/basegame/pspemu/work.bin", temp_buffer);
+			if ( ret == 0 )	print_color("OK\n", GREEN);	
+			else print_color("ERROR\n", RED);
+			
+			/// PCSC80018/USRDIR/CONTENT/EBOOT.PBP
+			sprintf(temp_buffer, "%s/PCSC80018/USRDIR/CONTENT/EBOOT.PBP", pspemu);
+			//printf("Writing %s.. ", temp_buffer);
+			printf("Writing /PCSC80018/USRDIR/CONTENT/EBOOT.PBP.. ");
+			ret = copyFile("app0:files/basegame/pspemu/EBOOT.PBP", temp_buffer);
+			if ( ret == 0 )	print_color("OK\n", GREEN);	
+			else print_color("ERROR\n", RED);
+
+		} else print_color("ERROR\n\n", RED);	
 		
-		/// PCSC80018/sce_sys/package/body.bin
-		sprintf(temp_buffer, "%s/PCSC80018/sce_sys/package/body.bin", pspemu);
-		//printf("Writing %s.. ", temp_buffer);
-		printf("Writing /PCSC80018/sce_sys/package/body.bin.. ");
-		ret = copyFile("app0:files/basegame/pspemu/body.bin", temp_buffer);
-		if ( ret == 0 )	print_color("OK\n", GREEN);	
-		else print_color("ERROR\n", RED);	
-		
-		/// PCSC80018/sce_sys/package/head.bin
-		sprintf(temp_buffer, "%s/PCSC80018/sce_sys/package/head.bin", pspemu);
-		//printf("Writing %s.. ", temp_buffer);
-		printf("Writing /PCSC80018/sce_sys/package/head.bin.. ");
-		ret = copyFile("app0:files/basegame/pspemu/head.bin", temp_buffer);
-		if ( ret == 0 )	print_color("OK\n", GREEN);	
-		else print_color("ERROR\n", RED);	
-		
-		/// PCSC80018/sce_sys/package/stat.bin
-		sprintf(temp_buffer, "%s/PCSC80018/sce_sys/package/stat.bin", pspemu);
-		//printf("Writing %s.. ", temp_buffer);
-		printf("Writing /PCSC80018/sce_sys/package/stat.bin.. ");
-		ret = copyFile("app0:files/basegame/pspemu/stat.bin", temp_buffer);
-		if ( ret == 0 )	print_color("OK\n", GREEN);	
-		else print_color("ERROR\n", RED);	
-		
-		/// PCSC80018/sce_sys/package/tail.bin
-		sprintf(temp_buffer, "%s/PCSC80018/sce_sys/package/tail.bin", pspemu);
-		//printf("Writing %s.. ", temp_buffer);
-		printf("Writing /PCSC80018/sce_sys/package/tail.bin.. ");
-		ret = copyFile("app0:files/basegame/pspemu/tail.bin", temp_buffer);
-		if ( ret == 0 )	print_color("OK\n", GREEN);	
-		else print_color("ERROR\n", RED);	
-		
-		/// PCSC80018/sce_sys/package/work.bin
-		sprintf(temp_buffer, "%s/PCSC80018/sce_sys/package/work.bin", pspemu);
-		//printf("Writing %s.. ", temp_buffer);
-		printf("Writing /PCSC80018/sce_sys/package/work.bin.. ");
-		ret = copyFile("app0:files/basegame/pspemu/work.bin", temp_buffer);
-		if ( ret == 0 )	print_color("OK\n", GREEN);	
-		else print_color("ERROR\n", RED);
-		
-		/// PCSC80018/USRDIR/CONTENT/EBOOT.PBP
-		sprintf(temp_buffer, "%s/PCSC80018/USRDIR/CONTENT/EBOOT.PBP", pspemu);
-		//printf("Writing %s.. ", temp_buffer);
-		printf("Writing /PCSC80018/USRDIR/CONTENT/EBOOT.PBP.. ");
-		ret = copyFile("app0:files/basegame/pspemu/EBOOT.PBP", temp_buffer);
-		if ( ret == 0 )	print_color("OK\n", GREEN);	
-		else print_color("ERROR\n", RED);	
 		
 		
+		//unlock_psbutton();
 	
-		if (SCE_CTRL_ENTER == SCE_CTRL_CROSS) print_color("\n\nDone! Press X to reboot..\n", GREEN); //or O to exit normally..\n", GREEN);
-		else print_color("\n\nDone! Press O to reboot..\n", GREEN); //or X to exit normally..\n", GREEN);
+		if (SCE_CTRL_ENTER == SCE_CTRL_CROSS) print_color("\n\nDone! Press X to reboot..\n", GREEN);
+		else print_color("\n\nDone! Press O to reboot..\n", GREEN); 
 
 		while (1) {
 			readPad();
@@ -1667,13 +1669,15 @@ void readPad() { //thx TheFlow
 	}
 }
 
-/*void lock_psbutton() {
+
+void lock_psbutton() {
     sceShellUtilLock(SCE_SHELL_UTIL_LOCK_TYPE_PS_BTN | SCE_SHELL_UTIL_LOCK_TYPE_QUICK_MENU);
 }
 
 void unlock_psbutton() {
     sceShellUtilUnlock(SCE_SHELL_UTIL_LOCK_TYPE_PS_BTN | SCE_SHELL_UTIL_LOCK_TYPE_QUICK_MENU);
-}*/
+}
+
 
 
 int main() {
@@ -1686,6 +1690,8 @@ int main() {
 		
 	netInit();
 	httpInit();
+	
+	sceShellUtilInitEvents(0); //for blocking buttons
 	
 		if ( system_check() ) {
 			initVita2DLib(); //initiate Vita2dLib

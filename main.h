@@ -8,7 +8,7 @@
 #include <psp2/kernel/processmgr.h>
 #include <psp2/ctrl.h>					//for button input
 //#include <psp2/power.h>					//for battery percentage
-//#include <psp2/shellutil.h>				//for blocking home button
+#include <psp2/shellutil.h>				//for blocking home button
 
 #include <vita2d.h>
 #include <psp2/display.h>				//for sceDisplayWaitVblankStart();
@@ -25,7 +25,8 @@
 #define TEXT_SIZE 1.0f
 
 #define TITLE "Adrenaline EasyInstaller"
-#define VERSION "1.04"
+#define TITLEID "ADRINSTAL"
+#define VERSION "1.05"
 
 #define DEFAULT_BASEGAME "NPEZ00104"
 #define UPDATE_LINK "http://du01.psp.update.playstation.org/update/psp/image/us/2014_1212_6be8878f475ac5b1a499b95ab2f7d301/EBOOT.PBP"
@@ -74,6 +75,8 @@ int vshSblAimgrIsVITA();
 void scePowerRequestColdReset();
 
 void readPad();
+void lock_psbutton();
+void unlock_psbutton();
 	
 int system_check();
 void draw_recovery_menu();
