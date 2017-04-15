@@ -159,7 +159,7 @@ int system_check() {
 	
 	/// Adrenaline prx files in ux0:pspemu/adrenaline
 	printf("Checking for Adrenaline prx files.. ");	
-	if ( doesFileExist("ux0:pspemu/adrenaline/adrenaline.skprx") ) {
+	if ( doesFileExist("ux0:adrenaline/adrenaline.skprx") ) {
 		print_color("Found!!\n\n", GREEN);	
 	} else {
 		print_color("Not found!!\n\n", YELLOW);
@@ -184,8 +184,8 @@ int system_check() {
 			else print_color("Error\n\n", RED);
 			
 			//also delete "maybe" old adrenaline prx files although it doesn't matter
-			sceIoRemove("ux0:pspemu/adrenaline/adrenaline.skprx");
-			sceIoRemove("ux0:pspemu/adrenaline/adrenaline.suprx");
+			sceIoRemove("ux0:adrenaline/adrenaline.skprx");
+			sceIoRemove("ux0:adrenaline/adrenaline.suprx");
 			
 			PSP_GAME_ID[0] = 0; //clear it to continue
 			
@@ -196,7 +196,7 @@ int system_check() {
 	
 	/// check for Adrenaline flash files	
 	printf("Checking for Adrenaline flash files.. ");	
-	if ( doesDirExist("ux0:pspemu/adrenaline/flash0") ) {
+	if ( doesDirExist("ux0:adrenaline/flash0") ) {
 		print_color("Found!!\n\n", GREEN);	
 		more_menu[1].type = MENU_ACTIVE; //activate "Delete flash files"
 		
@@ -206,7 +206,7 @@ int system_check() {
 
 	/// check for 661.PBP
 	printf("Checking for 661.PBP.. ");	
-	if ( doesFileExist("ux0:pspemu/adrenaline/661.PBP") ) {
+	if ( doesFileExist("ux0:adrenaline/661.PBP") ) {
 		print_color("Found!!\n\n", GREEN);
 		
 		//add check here for correct/complete update file
