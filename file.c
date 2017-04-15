@@ -331,7 +331,7 @@ const char *get_id_of_psp_game_that_adrenaline_is_installed_to() { //return PSP 
 			//read in the Title_ID starting with a *
 			if( strstr(&buffer[0], "*") ) memmove(GAME_ID, buffer+1, sizeof(buffer));
 			
-			if( strstr(buffer, "ux0:pspemu/adrenaline/adrenaline.suprx") ) {
+			if( strstr(buffer, "ux0:adrenaline/adrenaline.suprx") ) {
 				sprintf(PSP_GAME_ID, "%s", GAME_ID); //save global
 				return GAME_ID;
 			}	
@@ -366,7 +366,7 @@ int write_adrenaline_to_config(char *id) {
 				if ( buffer[strlen(buffer)-1] != '\n' ) fprintf(temp, "\n"); //whitespaces fix
 			
 			if( (strstr(buffer, "*KERNEL")) != NULL ) {
-				fprintf(temp, "ux0:pspemu/adrenaline/adrenaline.skprx\n");
+				fprintf(temp, "ux0:adrenaline/adrenaline.skprx\n");
 			}
 		}
 		
@@ -375,7 +375,7 @@ int write_adrenaline_to_config(char *id) {
 		//end of file (append the rest)
 		fprintf(temp, "*%s\n", id);
 		fprintf(temp, "vs0:sys/external/libpgf.suprx\n");
-		fprintf(temp, "ux0:pspemu/adrenaline/adrenaline.suprx\n");
+		fprintf(temp, "ux0:adrenaline/adrenaline.suprx\n");
 			
 	}
 	fclose(file);
@@ -402,10 +402,10 @@ int delete_adrenaline_from_config(char *id) {
 		
 		while (fgets(buffer, sizeof(buffer), file) != NULL) {
 			
-			if( (strstr(buffer, "ux0:pspemu/adrenaline/adrenaline.skprx")) != NULL ) continue;	
+			if( (strstr(buffer, "ux0:adrenaline/adrenaline.skprx")) != NULL ) continue;	
 			if( (strstr(buffer, id)) != NULL ) continue;
 			if( (strstr(buffer, "vs0:sys/external/libpgf.suprx")) != NULL )	continue;		
-			if( (strstr(buffer, "ux0:pspemu/adrenaline/adrenaline.suprx")) != NULL ) continue;	
+			if( (strstr(buffer, "ux0:adrenaline/adrenaline.suprx")) != NULL ) continue;	
 			
 			fprintf(temp, "%s", buffer);
 		}			
