@@ -15,6 +15,7 @@
 /** Changelog
 * v1.08
 * - updated for Adrenaline-3 fix
+* - removed resetting of installed flash files when up/downgrading as its not needed
 *
 * v1.07
 * - added all releases of Adrenaline to choose from
@@ -1733,6 +1734,8 @@ void change_adrenaline_files(char *id, char *arg, char *arg2, int mode) {
 			else print_color("ERROR\n", RED);	
 		}	
 		
+		
+		/* Not (maybe yet) needed
 		/// flash0 folder
 		sprintf(buffer, "%s/flash0", ADR_FOLDER);
 		if ( doesDirExist(buffer) ) {
@@ -1749,7 +1752,7 @@ void change_adrenaline_files(char *id, char *arg, char *arg2, int mode) {
 			ret = removePath(buffer);
 			if ( ret )	print_color("OK\n", GREEN);
 			else print_color("ERROR\n", RED);
-		}	
+		}*/
 		
 		
 	// Overwrite files
