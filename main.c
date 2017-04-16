@@ -13,6 +13,9 @@
 */ 
 
 /** Changelog
+* v1.08
+* - updated for Adrenaline-3 fix
+*
 * v1.07
 * - added all releases of Adrenaline to choose from
 * - restructured the menu because of all new options
@@ -87,6 +90,7 @@ Menu installer_menu[] = {
 
 Menu files_menu[] = {
 	//*title									//type				//*function				//*arg				//*arg2 					//*message
+	{"2017-04-16 : adrenaline_v3_fix.zip"		, MENU_ACTIVE		, draw_psp_games		,"adrenaline_v3_fix", "ux0:adrenaline"			, ""	},
 	{"2017-04-15 : adrenaline_v3.zip"			, MENU_ACTIVE		, draw_psp_games		,"adrenaline_v3"	, "ux0:adrenaline"			, ""	},
 	{"2017-04-02 : adrenaline_v2.zip"			, MENU_ACTIVE		, draw_psp_games		,"adrenaline_v2"	, "ux0:adrenaline"			, ""	},
 	{"2016-11-18 : adrenaline_fix2.zip"			, MENU_ACTIVE		, draw_psp_games		,"adrenaline_fix2"	, "ux0:pspemu/adrenaline"	, ""	},
