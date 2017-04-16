@@ -57,5 +57,11 @@
 - removed blocking of PSButton again<br>
 - removed unnecessary files & code<br>
     ]]>
+  </changes> 
+  <changes app_ver="01.08">
+    <![CDATA[
+- updated for Adrenaline-3 fix<br>
+- removed resetting of installed flash files when up/downgrading as its not needed<br>
+    ]]>
   </changes>
 </changeinfo>
