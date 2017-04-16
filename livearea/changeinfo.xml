@@ -33,4 +33,29 @@
 - fixed a bug with wrongly formatted tai-config files<br>
     ]]>
   </changes>
+  <changes app_ver="01.06">
+    <![CDATA[
+- updated for Adrenaline-2<br>
+    ]]>
+  </changes>
+  <changes app_ver="01.07">
+    <![CDATA[
+- added all releases of Adrenaline to choose from<br>
+- restructured the menu because of all new options<br>
+- you can now up/downgrade without rebooting (with same basegame)<br>
+- the used basegame for Adrenaline will show up green in selection menu<br>
+- added Advanced LiveArea Theming Option (app.db)<br>
+- added view Adrenaline Update-History as option<br>
+- added firmware check warning for future hacks<br>
+- added check for valid 661.PBP file (if not it will be deleted)<br>
+- added check for existing PBOOTs in basegames<br>
+- added check for changeinfo.xml installation<br>
+- typical CFW files & folders will now be created automatically<br>
+- added option to display taiHEN config.txt<br>
+- added option to reload taiHEN config.txt<br>
+- adjusted Bubble Name and livearea<br>
+- removed blocking of PSButton again<br>
+- removed unnecessary files & code<br>
+    ]]>
+  </changes>
 </changeinfo>
