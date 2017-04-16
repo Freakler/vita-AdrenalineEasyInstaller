@@ -1,0 +1,37 @@
+- Changelog v3 - [adrenaline_v3.zip] (2017-04-15)
+  - Added ability to launch PS1 games from XMB and play them with full sound.
+  - Added ability to save and load states using the 'States' tab in the Adrenaline menu.
+  - Added ability to connect USB in XMB & added 'Toggle USB' option to recovery menu.
+  - Added ability to return to livearea by double tapping the PS button.
+  - Added Adrenaline startup image designed by Freakler.
+  - Added option to force high memory layout. For 'The Elder Scrolls Travels: Oblivion'
+  - Added option to execute 'BOOT.BIN' in UMD/ISO. For 'Saints Row: Undercover' Demo.
+  - Added correct enter and cancel buttons assignment.
+  - Fixed volatile memory allocation bug that made 'Star Wars: The Force Unleashed',
+    'Tony Hawk's Project 8' and maybe more games crashing.
+  - Fixed bug that was introduced in v2 which caused some games to crashed at PMF 
+    sequences.
+  - Fixed NoDrm engine bug where fan transl. games couldn't load PGD decrypted files.
+  - Fixed msfs directory filter bug that caused some games not to recognize savedatas.
+  - Fixed compatiblity of base games, any game should now be able to use Adrenaline to 
+    the fullest.
+
+  
+- Changelog v2 - [adrenaline_v2.zip] (2017-04-02)
+  - Added 64MB RAM support for homebrews.
+  - Added ability to use the 'ur0:' partition as Memory Stick.
+  - Added Advanced AA filter (disable 'Smooth Graphics' for that filter).
+  - Added ability to change smooth graphics (GPU internal bilinear filter).
+  - Added ability to change screen size (2.0x, 1.75x, 1.5x, 1.25x, 1.0x).
+  - Fixed sound issue in 'MotorStorm' and some other games.
+  - Fixed bug where 'ms0:/MUSIC' and 'ms0:/PICTURE' were not found in XMB.
+  - Fixed bug where changing options in the official settings menu didn't have any effect.
+
+
+- Changelog v1_fix2 - [adrenaline_fix2.zip] (2016-11-18)
+  - Fixed 661.PBP bug
+  - Fixed C1-2858-3 error (Minis are now compatible)
+
+
+- Changelog v1 - [adrenaline.zip] (2016-11-17)
+  - initial release
