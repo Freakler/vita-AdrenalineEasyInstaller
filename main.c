@@ -1776,7 +1776,6 @@ void change_adrenaline_files(char *id, char *arg, char *arg2, int mode) {
 			else print_color("ERROR\n\n", RED);	
 		} else {
 			if( doesFileExist(buffer) ) {
-				//delete TODO
 				printf("Deleting %s.. ", buffer);
 				ret = sceIoRemove(buffer);
 				if ( ret == 0 )	print_color("OK\n", GREEN);	
