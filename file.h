@@ -33,19 +33,25 @@ int doesFileExist(const char* path);
 int doesDirExist(const char* path);
 
 int copyFile(char *src_path, char *dst_path);
+int getFileSize(const char *file);
+int createEmptyFile(char *path);
 
 int makePath(const char *dir);
 int removePath(char *path);
 
 int download_file(const char *src, const char *dst);
 
-const char *get_id_of_psp_game_that_adrenaline_is_installed_to();
-int write_adrenaline_to_config(char *id);
-int delete_adrenaline_from_config(char *id);
+void get_id_of_psp_game_that_adrenaline_is_installed_to(char *path);
+int write_adrenaline_to_config(char *path, char *id);
+int delete_adrenaline_from_config(char *path, char *id);
 int check_for_psp_content(char *path);
 
 void trigger_update_database();
 void trigger_rebuild_database();
 
 int writeChangeinfo(const char* id);
+char *getRealFirmwareVersion(int arg);
+
+char *read_installed_adrenaline_version(char *path);
+int write_installed_adrenaline_version(char *path, char *arg);
 #endif

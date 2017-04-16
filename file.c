@@ -138,6 +138,17 @@ int doesDirExist(const char* path) {
  	} 
 } 
 
+int getFileSize(const char *file) {  //thx Flow VitaShell
+	SceUID fd = sceIoOpen(file, SCE_O_RDONLY, 0);
+	if (fd < 0)
+		return fd;
+
+	int fileSize = sceIoLseek(fd, 0, SCE_SEEK_END);
+	
+	sceIoClose(fd);
+	return fileSize;
+}
+
 int copyFile(char *src_path, char *dst_path) { //thx Flow VitaShell
 	// The source and destination paths are identical
 	if (strcmp(src_path, dst_path) == 0) return -1;
@@ -167,6 +178,19 @@ int copyFile(char *src_path, char *dst_path) { //thx Flow VitaShell
 	sceIoClose(fddst);
 	sceIoClose(fdsrc);
 
+	return 0;
+}
+
+int createEmptyFile(char *path) {
+	FILE *file = fopen(path, "w");
+	
+	if (file == NULL){
+		return -1;
+		
+	} else {
+		//fprintf(file, "");
+	}
+	fclose(file);
 	return 0;
 }
 
@@ -254,22 +278,22 @@ int download_file(const char *src, const char *dst) { //thx molecule offline ins
 	
 	int tpl = sceHttpCreateTemplate("henkaku offline", 2, 1);
 	if (tpl < 0) {
-		printf("sceHttpCreateTemplate: 0x%x\n", tpl);
+		printf("sceHttpCreateTemplate: 0x%x ", tpl);
 		return tpl;
 	}
 	int conn = sceHttpCreateConnectionWithURL(tpl, src, 0);
 	if (conn < 0) {
-		printf("sceHttpCreateConnectionWithURL: 0x%x\n", conn);
+		printf("sceHttpCreateConnectionWithURL: 0x%x ", conn);
 		return conn;
 	}
 	int req = sceHttpCreateRequestWithURL(conn, 0, src, 0);
 	if (req < 0) {
-		printf("sceHttpCreateRequestWithURL: 0x%x\n", req);
+		printf("sceHttpCreateRequestWithURL: 0x%x ", req);
 		return req;
 	}
 	ret = sceHttpSendRequest(req, NULL, 0);
 	if (ret < 0) {
-		printf("sceHttpSendRequest: 0x%x\n", ret);
+		printf("sceHttpSendRequest: 0x%x ", ret);
 		return ret;
 	}
 	unsigned char buf[4096] = {0};
@@ -280,7 +304,7 @@ int download_file(const char *src, const char *dst) { //thx molecule offline ins
 	int fd = sceIoOpen(dst, SCE_O_WRONLY | SCE_O_CREAT | SCE_O_TRUNC, 6);
 	int total_read = 0;
 	if (fd < 0) {
-		printf("sceIoOpen: 0x%x\n", fd);
+		printf("sceIoOpen: 0x%x ", fd);
 		return fd;
 	}
 
@@ -288,7 +312,7 @@ int download_file(const char *src, const char *dst) { //thx molecule offline ins
 		int read = sceHttpReadData(req, buf, sizeof(buf));
 		
 		if (read < 0) {
-			printf("sceHttpReadData error! 0x%x\n", read);
+			printf("sceHttpReadData error! 0x%x ", read);
 			return read;
 		}
 		
@@ -296,7 +320,7 @@ int download_file(const char *src, const char *dst) { //thx molecule offline ins
 			
 		ret = sceIoWrite(fd, buf, read);
 		if (ret < 0 || ret != read) {
-			printf("sceIoWrite error! 0x%x\n", ret);
+			printf("sceIoWrite error! 0x%x ", ret);
 			if (ret < 0)
 				return ret;
 			return -1;
@@ -309,15 +333,18 @@ int download_file(const char *src, const char *dst) { //thx molecule offline ins
 
 	ret = sceIoClose(fd);
 	if (ret < 0)
-		printf("sceIoClose: 0x%x\n", ret);
+		printf("sceIoClose: 0x%x ", ret);
 
 	return 0;
 }
 
 
-const char *get_id_of_psp_game_that_adrenaline_is_installed_to() { //return PSP GAME ID of which adrenaline is installed to (and save it globally)
+void get_id_of_psp_game_that_adrenaline_is_installed_to(char *path) { //return PSP GAME ID of which adrenaline is installed to (and save it globally)
 	
 	char buffer[255];
+	char pathbuff[1024];
+		sprintf(pathbuff, "%s/adrenaline.suprx", path );	
+	
 	static char GAME_ID[32];
 	
 	FILE* config = fopen("ux0:tai/config.txt", "r");
@@ -331,22 +358,23 @@ const char *get_id_of_psp_game_that_adrenaline_is_installed_to() { //return PSP 
 			//read in the Title_ID starting with a *
 			if( strstr(&buffer[0], "*") ) memmove(GAME_ID, buffer+1, sizeof(buffer));
 			
-			if( strstr(buffer, "ux0:pspemu/adrenaline/adrenaline.suprx") ) {
+			if( strstr(buffer, pathbuff) ) {
 				sprintf(PSP_GAME_ID, "%s", GAME_ID); //save global
-				return GAME_ID;
+				//return GAME_ID;
 			}	
 
 		}	
 		fclose(config);
 	}	
 	
-	return "Not found"; 
+	//return "Not found"; 
 }
 
 
-int write_adrenaline_to_config(char *id) {
+int write_adrenaline_to_config(char *path, char *id) {
 	
 	char buffer[1024];
+	char pathbuff[1024];
 	
 	FILE *file = fopen("ux0:tai/config.txt", "r");
 	FILE *temp = fopen("ux0:tai/temp.txt", "w");
@@ -366,7 +394,8 @@ int write_adrenaline_to_config(char *id) {
 				if ( buffer[strlen(buffer)-1] != '\n' ) fprintf(temp, "\n"); //whitespaces fix
 			
 			if( (strstr(buffer, "*KERNEL")) != NULL ) {
-				fprintf(temp, "ux0:pspemu/adrenaline/adrenaline.skprx\n");
+				sprintf(pathbuff, "%s/adrenaline.skprx\n", path );	
+				fprintf(temp, pathbuff);
 			}
 		}
 		
@@ -374,8 +403,12 @@ int write_adrenaline_to_config(char *id) {
 		
 		//end of file (append the rest)
 		fprintf(temp, "*%s\n", id);
-		fprintf(temp, "vs0:sys/external/libpgf.suprx\n");
-		fprintf(temp, "ux0:pspemu/adrenaline/adrenaline.suprx\n");
+		
+		if ( strcmp(path, "ux0:pspemu/adrenaline") == 0 ) //this is only for the initial release with ux0:pspemu/adr..
+			fprintf(temp, "vs0:sys/external/libpgf.suprx\n");
+		
+		sprintf(pathbuff, "%s/adrenaline.suprx\n", path );	
+		fprintf(temp, pathbuff);
 			
 	}
 	fclose(file);
@@ -388,9 +421,10 @@ int write_adrenaline_to_config(char *id) {
 	return 0;
 }
 
-int delete_adrenaline_from_config(char *id) {
+int delete_adrenaline_from_config(char *path, char *id) {
 
 	char buffer[1024];
+	char pathbuff[1024];
 	FILE *file = fopen("ux0:tai/config.txt", "r");
 	FILE *temp = fopen("ux0:tai/temp.txt", "w");
 	
@@ -402,10 +436,16 @@ int delete_adrenaline_from_config(char *id) {
 		
 		while (fgets(buffer, sizeof(buffer), file) != NULL) {
 			
-			if( (strstr(buffer, "ux0:pspemu/adrenaline/adrenaline.skprx")) != NULL ) continue;	
+			sprintf(pathbuff, "%s/adrenaline.skprx", path );	
+			if( (strstr(buffer, pathbuff)) != NULL ) continue;	
+			
 			if( (strstr(buffer, id)) != NULL ) continue;
-			if( (strstr(buffer, "vs0:sys/external/libpgf.suprx")) != NULL )	continue;		
-			if( (strstr(buffer, "ux0:pspemu/adrenaline/adrenaline.suprx")) != NULL ) continue;	
+			
+				if ( strcmp(path, "ux0:pspemu/adrenaline") == 0 ) //this is only for the initial release with ux0:pspemu/adr..
+					if( (strstr(buffer, "vs0:sys/external/libpgf.suprx")) != NULL )	continue; //only for the first version
+			
+			sprintf(pathbuff, "%s/adrenaline.suprx", path );				
+			if( (strstr(buffer, pathbuff)) != NULL ) continue;	
 			
 			fprintf(temp, "%s", buffer);
 		}			
@@ -551,3 +591,55 @@ int writeChangeinfo(const char* id) { // return  1 on success
 	return 0;	
 }
 
+char *getRealFirmwareVersion(int arg) { //with arg = 1 [3.60] with arg = 0 [0x03600000]
+	
+	FILE *fp = NULL;
+    unsigned char hex[32] = "";
+	static char version[16];
+
+    if ( ( fp = fopen ( "os0:psp2bootconfig.skprx", "rb")) == NULL) {
+        return "Error!?";
+    }
+
+	fseek(fp, 146, SEEK_SET);
+	fread( &hex, 8, 1, fp);
+	fclose(fp);
+	
+	if ( arg == 1) {
+		sprintf(version, "%x.%02x", hex[3], hex[2]);
+	} else {
+		sprintf(version, "0x%02x%02x%02x%02x", hex[3], hex[2], hex[1], hex[0]);
+	}	
+	return version;
+}
+
+char *read_installed_adrenaline_version(char *path) {
+	static char readbuffer[256];
+	
+	FILE *file = fopen(path, "r");
+	
+	if (file == NULL){ //Error: Couldn't open
+		return "error";
+	} else {
+		fgets(readbuffer, sizeof(readbuffer), file);
+	}
+	fclose(file);
+		
+	return readbuffer;
+}
+
+int write_installed_adrenaline_version(char *path, char *arg) {
+	
+	//sceIoRemove(path); 
+	
+	FILE *file = fopen(path, "w");
+	
+	if (file == NULL){ //Error: Couldn't open for writing
+		return -1;
+	} else {
+		fprintf(file, arg);
+	}
+	fclose(file);	
+	
+	return 1;
+}
