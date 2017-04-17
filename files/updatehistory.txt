@@ -1,3 +1,9 @@
+- Changelog v3.1 - [adrenaline_v3.1.zip] (2017-04-17)
+  - Added support for cwcheat in PS1 games.
+  - Fixed sound problems after exiting a PS1 game.
+  - Fixed 'Please wait...' bug in some games.
+  - Fixed problem where mounting ur0: as USB device would cause problems in livearea.
+  
 - Changelog v3 fix - [adrenaline_v3_fix.zip] (2017-04-16)
   - Fixed bug where 'Cannot find application' would show instead of returning to livearea.
   - Fixed bug where you couldn't access the Adrenaline Menu after enabling/disabling wifi.
