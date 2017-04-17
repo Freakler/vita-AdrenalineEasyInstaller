@@ -64,4 +64,9 @@
 - removed resetting of installed flash files when up/downgrading as its not needed<br>
     ]]>
   </changes>
+  <changes app_ver="01.09">
+    <![CDATA[
+- updated for Adrenaline-3.1<br>
+    ]]>
+  </changes>
 </changeinfo>
