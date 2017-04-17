@@ -42,6 +42,9 @@ all: $(TARGET).vpk
       -a files/releases/adrenaline_v3_fix/adrenaline.skprx=files/releases/adrenaline_v3_fix/adrenaline.skprx \
       -a files/releases/adrenaline_v3_fix/adrenaline.suprx=files/releases/adrenaline_v3_fix/adrenaline.suprx \
       -a files/releases/adrenaline_v3_fix/usbdevice.skprx=files/releases/adrenaline_v3_fix/usbdevice.skprx \
+      -a files/releases/adrenaline_v3.1/adrenaline.skprx=files/releases/adrenaline_v3.1/adrenaline.skprx \
+      -a files/releases/adrenaline_v3.1/adrenaline.suprx=files/releases/adrenaline_v3.1/adrenaline.suprx \
+      -a files/releases/adrenaline_v3.1/usbdevice.skprx=files/releases/adrenaline_v3.1/usbdevice.skprx \
       -a files/updatehistory.txt=files/updatehistory.txt \
       -a files/icon0.dds=files/icon0.dds \
       -a files/bg0.png=files/bg0.png \
