@@ -69,4 +69,10 @@
 - updated for Adrenaline-3.1<br>
     ]]>
   </changes>
+  <changes app_ver="01.10">
+    <![CDATA[
+- updated for Adrenaline-4<br>
+- added option to delete SaveStates<br>
+    ]]>
+  </changes>
 </changeinfo>
