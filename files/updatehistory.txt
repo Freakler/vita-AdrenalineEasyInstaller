@@ -1,3 +1,12 @@
+ - Changelog v4 - [adrenaline_v4.zip] (2017-04-18)
+  - Added custom graphics filtering support for PS1 games.
+  - Added screen mode adjustment for PS1 games.
+  - Added screenshot support in PS1 games.
+  - Added network update feature for future updates.
+  - Fixed a bug in msfs driver that caused weird behaviour in XMB after resuming from 
+    standby.
+  - Removed 'Official' graphics filtering in order to support the features mentioned above.
+  
 - Changelog v3.1 - [adrenaline_v3.1.zip] (2017-04-17)
   - Added support for cwcheat in PS1 games.
   - Fixed sound problems after exiting a PS1 game.
