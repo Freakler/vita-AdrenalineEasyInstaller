@@ -1855,24 +1855,23 @@ void change_adrenaline_files(char *id, char *arg, char *arg2, int mode) {
 			
 		}
 		
-		
+	printf("\n");
+	
 	if ( mode | ( strcmp(PSP_GAME_ID, id) != 0 ) ) { //since the path and or basegame changed in tai/config.txt we need to reload it
-		
-		printf("\n");
 		
 		/// writing to tai config
 		printf("Editing ux0:tai/config.txt.. ");
 		ret = write_adrenaline_to_config(ADR_FOLDER, id);
 		if ( ret == 0 )	print_color("OK\n", GREEN);
-		else print_color("ERROR\n", RED);
-		
-		/// and reload it (although we might need to reboot anyways)
-		printf("Reloading taiHEnkaku config.. ");
-		ret = taiReloadConfig();
-		if ( ret == 0) print_color("OK\n", GREEN);
-		else print_color("ERROR\n", RED);	
+		else print_color("ERROR\n", RED);		
 	}
 	
+	/// and reload it (although we might need to reboot anyways)
+	printf("Reloading taiHEnkaku config.. ");
+	ret = taiReloadConfig();
+	if ( ret == 0) print_color("OK\n", GREEN);
+	else print_color("ERROR\n", RED);	
+		
 	//unblock_psbutton();
 	
 	
@@ -1900,7 +1899,6 @@ void change_adrenaline_files(char *id, char *arg, char *arg2, int mode) {
 		while (1) {
 			readPad();
 			if (pressed_buttons & SCE_CTRL_ENTER) {
-				taiReloadConfig();
 				sceKernelExitProcess(0);
 			}	
 			if (pad.buttons & SCE_CTRL_SELECT && pad.buttons & SCE_CTRL_START) sceKernelExitProcess(0);
