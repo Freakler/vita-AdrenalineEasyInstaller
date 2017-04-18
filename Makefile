@@ -3,7 +3,7 @@ TARGET   = EasyInstaller
 NAME     = Adrenaline EasyInstaller
 OBJS     = main.o font.o graphics.o init.o file.o vita_sqlite.o sqlite-3.6.23.1/sqlite3.o
 
-PSVITAIP = 192.168.0.103
+PSVITAIP = 192.168.0.105
 
 RESOURCES_PNG = materials/button_pad.png materials/button_cross.png materials/button_circle.png
 OBJS += $(RESOURCES_PNG:.png=.o)
@@ -45,6 +45,9 @@ all: $(TARGET).vpk
       -a files/releases/adrenaline_v3.1/adrenaline.skprx=files/releases/adrenaline_v3.1/adrenaline.skprx \
       -a files/releases/adrenaline_v3.1/adrenaline.suprx=files/releases/adrenaline_v3.1/adrenaline.suprx \
       -a files/releases/adrenaline_v3.1/usbdevice.skprx=files/releases/adrenaline_v3.1/usbdevice.skprx \
+      -a files/releases/adrenaline_v4/adrenaline.skprx=files/releases/adrenaline_v4/adrenaline.skprx \
+      -a files/releases/adrenaline_v4/adrenaline.suprx=files/releases/adrenaline_v4/adrenaline.suprx \
+      -a files/releases/adrenaline_v4/usbdevice.skprx=files/releases/adrenaline_v4/usbdevice.skprx \
       -a files/updatehistory.txt=files/updatehistory.txt \
       -a files/icon0.dds=files/icon0.dds \
       -a files/bg0.png=files/bg0.png \

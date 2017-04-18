@@ -13,6 +13,10 @@
 */ 
 
 /** Changelog
+* v1.10
+* - updated for Adrenaline-4
+* - added option to delete SaveStates
+* 
 * v1.09
 * - updated for Adrenaline-3.1
 *
@@ -94,7 +98,8 @@ Menu installer_menu[] = {
 
 Menu files_menu[] = {
 	//*title									//type				//*function				//*arg				//*arg2 					//*message
-	{"2017-04-16 : adrenaline_v3.1.zip"			, MENU_ACTIVE		, draw_psp_games		,"adrenaline_v3.1"	, "ux0:adrenaline"			, ""	},
+	{"2017-04-18 : adrenaline_v4.zip"			, MENU_ACTIVE		, draw_psp_games		,"adrenaline_v4"	, "ux0:adrenaline"			, ""	},
+	{"2017-04-17 : adrenaline_v3.1.zip"			, MENU_ACTIVE		, draw_psp_games		,"adrenaline_v3.1"	, "ux0:adrenaline"			, ""	},
 	{"2017-04-16 : adrenaline_v3_fix.zip"		, MENU_ACTIVE		, draw_psp_games		,"adrenaline_v3_fix", "ux0:adrenaline"			, ""	},
 	{"2017-04-15 : adrenaline_v3.zip"			, MENU_ACTIVE		, draw_psp_games		,"adrenaline_v3"	, "ux0:adrenaline"			, ""	},
 	{"2017-04-02 : adrenaline_v2.zip"			, MENU_ACTIVE		, draw_psp_games		,"adrenaline_v2"	, "ux0:adrenaline"			, ""	},
@@ -119,6 +124,7 @@ Menu more_menu[] = {
 	{"Install a small PSP Basegame if needed"	, MENU_BLOCKED		, install_pspgame			,""			, ""	, "" 	},
 	{"Delete installed Adrenaline flash files"	, MENU_BLOCKED		, option_delete_flash		,""			, ""	, ""	},
 	{"Delete 661.PBP update file"				, MENU_BLOCKED		, option_delete_pbp			,""			, ""	, ""	},
+	{"Delete all Adrenaline SaveStates"			, MENU_BLOCKED		, option_delete_savestates	,""			, ""	, ""	},
 	{"Display taiHENkaku config.txt file"		, MENU_ACTIVE		, option_show_taiconfig		,""			, ""	, ""	},
 	//{"testing stuff"							, MENU_ACTIVE		, option_test				,""			, ""	, ""	},
 	{"★ Reload taiHENkaku config"				, MENU_ACTIVE		, option_reloadTaiConfig	,""			, ""	, "" 	},
@@ -324,6 +330,15 @@ int system_check() {
 			}
 		} else {
 			print_color("Not found!\n\n", YELLOW);
+		}
+		
+		/// check for Adrenaline savestates	
+		//printf("Checking for installed Adrenaline flash files.. ");
+		if ( doesDirExist("ux0:pspemu/PSP/SAVESTATE") ) {
+			//print_color("OK\n\n", GREEN);	
+			more_menu[3].type = MENU_ACTIVE; //activate 
+		} else {
+			//print_color("Not found!\n\n", YELLOW);
 		}
 		
 		///check for sqlite theme installing activate or not
@@ -866,6 +881,22 @@ void *more_options(char *arg) {
 			} else {
 				recovery_draw_message(MAIN_TITLE, "The Update file has been deleted!", "Okay");
 				more_menu[2].type = MENU_BLOCKED; //deactivate again
+			}
+		}
+		return 0;
+	}
+	
+	/// This will delete the savestates folder
+	int *option_delete_savestates() {
+		int ret = recovery_draw_dialog(MAIN_TITLE, "Do you really want to delete all your SaveStates?", "(ux0:pspemu/PSP/SAVESTATE/)");
+		if ( ret ) {
+			recovery_draw_statusmessage(MAIN_TITLE, "Deleting.. Please wait..");
+			ret = removePath("ux0:pspemu/PSP/SAVESTATE");
+			if ( ret == 1 ) {
+				recovery_draw_message(MAIN_TITLE, "All SaveStates have been deleted!", "Okay");
+				more_menu[3].type = MENU_BLOCKED; //deactivate again
+			} else {
+				recovery_draw_message(MAIN_TITLE, "An error occured!", "Okay");	
 			}
 		}
 		return 0;

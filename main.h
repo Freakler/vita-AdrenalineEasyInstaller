@@ -27,7 +27,7 @@
 
 #define MAIN_TITLE "Adrenaline EasyInstaller"
 #define TITLEID "ADRINSTAL"
-#define VERSION "1.09"
+#define VERSION "1.10"
 
 #define DEFAULT_BASEGAME "NPEZ00104" //coming with integrated installer
 
@@ -126,6 +126,7 @@ void recovery_draw_submenu(Menu *sub_menu, const char* title, char *arg);
 	//more_menu
 	void *install_pspgame();
 	int *option_delete_pbp();
+	int *option_delete_savestates();
 	int *option_delete_flash();
 	int *option_show_changelogfile();
 	int *option_show_taiconfig();
