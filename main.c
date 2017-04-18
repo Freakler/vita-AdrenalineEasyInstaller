@@ -1900,6 +1900,7 @@ void change_adrenaline_files(char *id, char *arg, char *arg2, int mode) {
 		while (1) {
 			readPad();
 			if (pressed_buttons & SCE_CTRL_ENTER) {
+				taiReloadConfig();
 				sceKernelExitProcess(0);
 			}	
 			if (pad.buttons & SCE_CTRL_SELECT && pad.buttons & SCE_CTRL_START) sceKernelExitProcess(0);
