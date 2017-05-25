@@ -50,6 +50,7 @@ void trigger_update_database();
 void trigger_rebuild_database();
 
 int writeChangeinfo(const char* id);
+int checkUnsafeHomebrew();
 char *getRealFirmwareVersion(int arg);
 
 char *read_installed_adrenaline_version(char *path);

@@ -591,6 +591,17 @@ int writeChangeinfo(const char* id) { // return  1 on success
 	return 0;	
 }
 
+int checkUnsafeHomebrew() { //a tai syscall to check for this would be cool
+	FILE *fp = NULL;
+
+    if ( ( fp = fopen ( "os0:psp2bootconfig.skprx", "rb")) == NULL) {
+        return 1; //on error
+    }
+	
+	fclose(fp);
+	return 0;
+}
+
 char *getRealFirmwareVersion(int arg) { //with arg = 1 [3.60] with arg = 0 [0x03600000]
 	
 	FILE *fp = NULL;

@@ -3,16 +3,29 @@
 #include "file.h"
 #include "sqlite-3.6.23.1/sqlite3.h"
 
-/* Notes & TODO
+/** Notes & TODO
 * - remove PS1 official games from installer list
 * - figure out how to update database manually so no more rebooting (would fix next bulletpoint too)
 * - add warning for PSTV + USB Stick users
 * - Addon-Installer?!
 * -
 * - clean up & and learn how to code properly
-*/ 
+**/ 
+
+/*
+To add a new release:
+- put files in new folder in [files/releases/xxxxxxx]
+- add entry in "files_menu" (main.c)
+- adjust version in [main.c] [livearea/template.xml]
+- add EasyInstaller changelog to [livearea/changeinfo.xml]
+- add Adrenaline changelog to [files/updatehistory.txt]
+*/
 
 /** Changelog
+* v1.11
+* - updated for Adrenaline-4.1
+* - added unsafe hombrew check
+* 
 * v1.10
 * - updated for Adrenaline-4
 * - added option to delete SaveStates
@@ -98,6 +111,7 @@ Menu installer_menu[] = {
 
 Menu files_menu[] = {
 	//*title									//type				//*function				//*arg				//*arg2 					//*message
+	{"2017-04-18 : adrenaline_v4.1.zip"			, MENU_ACTIVE		, draw_psp_games		,"adrenaline_v4.1"	, "ux0:adrenaline"			, ""	},
 	{"2017-04-18 : adrenaline_v4.zip"			, MENU_ACTIVE		, draw_psp_games		,"adrenaline_v4"	, "ux0:adrenaline"			, ""	},
 	{"2017-04-17 : adrenaline_v3.1.zip"			, MENU_ACTIVE		, draw_psp_games		,"adrenaline_v3.1"	, "ux0:adrenaline"			, ""	},
 	{"2017-04-16 : adrenaline_v3_fix.zip"		, MENU_ACTIVE		, draw_psp_games		,"adrenaline_v3_fix", "ux0:adrenaline"			, ""	},
@@ -147,6 +161,23 @@ int system_check() {
 	
 	// Some system checks first ///////////////////////////////////////////////////////////////////////////////////////////////
 	
+		/// Unsafe Hombrew check
+		if ( checkUnsafeHomebrew() ) {
+			print_color("\n!! It seems you haven't enabled unsafe hombrews. !!\n\n\n", YELLOW);	
+				
+			if (SCE_CTRL_ENTER == SCE_CTRL_CROSS) printf("Press X to open the HENkaku settings or O to exit..\n\n");
+			else printf("Press O to open the HENkaku settings or X to exit..\n\n");
+				
+			while (1) {
+				readPad();
+				if (pressed_buttons & SCE_CTRL_CANCEL) sceKernelExitProcess(0);	
+				if (pressed_buttons & SCE_CTRL_ENTER) {
+					sceAppMgrLaunchAppByUri(0x20000, "settings_dlg:"); //launch flag 0x40000 | open flag 0x20000
+					sceKernelExitProcess(0);	
+				}
+			}
+		}
+		
 		/// Model Check
 		printf("Model = ");
 		if ( vshSblAimgrIsVITA() == 1 ) printf("Vita\n\n");
@@ -156,6 +187,7 @@ int system_check() {
 		printf("Enter Button = ");
 		if ( SCE_CTRL_ENTER == SCE_CTRL_CROSS ) printf("X\n\n");
 		else printf("O\n\n");
+		
 		
 		/// Firmware Check
 		printf("Firmware = ");

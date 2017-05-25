@@ -27,7 +27,7 @@
 
 #define MAIN_TITLE "Adrenaline EasyInstaller"
 #define TITLEID "ADRINSTAL"
-#define VERSION "1.10"
+#define VERSION "1.11"
 
 #define DEFAULT_BASEGAME "NPEZ00104" //coming with integrated installer
 
