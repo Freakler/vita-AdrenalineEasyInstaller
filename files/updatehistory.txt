@@ -1,3 +1,10 @@
+ - Changelog v4.1 - [adrenaline_v4.1.zip] (2017-05-25)
+  - Fixed bug where holding R trigger while launching Adrenaline didn't open the 
+    recovery menu.
+  - Fixed msfs truncation bug that caused savedata corruption for Little Big Planet 
+    and maybe other games.
+  - Fixed wrong scale of PS1 games on PS TV.
+  
  - Changelog v4 - [adrenaline_v4.zip] (2017-04-18)
   - Added custom graphics filtering support for PS1 games.
   - Added screen mode adjustment for PS1 games.
