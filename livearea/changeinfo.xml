@@ -75,4 +75,10 @@
 - added option to delete SaveStates<br>
     ]]>
   </changes>
+  <changes app_ver="01.10">
+    <![CDATA[
+- updated for Adrenaline-4.1<br>
+- added unsafe hombrew check<br>
+    ]]>
+  </changes>
 </changeinfo>
