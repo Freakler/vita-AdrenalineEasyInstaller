@@ -16,12 +16,15 @@
 To add a new release:
 - put files in new folder in [files/releases/xxxxxxx]
 - add entry in "files_menu" (main.c)
-- adjust version in [main.c] [livearea/template.xml]
+- adjust version in [main.h] [livearea/template.xml]
 - add EasyInstaller changelog to [livearea/changeinfo.xml]
 - add Adrenaline changelog to [files/updatehistory.txt]
 */
 
 /** Changelog
+* v1.12
+* - adjustments due to latest tai/config.txt location change
+* 
 * v1.11
 * - updated for Adrenaline-4.1
 * - added unsafe hombrew check
@@ -229,11 +232,18 @@ int system_check() {
 	
 		/// taiHENkaku check -> If not found the Installer won't start
 		printf("Checking for taiHENkaku.. ");
-		if ( doesFileExist("ux0:tai/config.txt") ) print_color("OK\n\n", GREEN);
-		else {
-			print_color("Nothing found!!\n\n\n", RED);
-			print_color("\n!!! Either you aren't running taiHENkaku, or you haven't enabled unsafe Homebrews in molecularShell yet!!!\n\n", RED);
-			goto error_exit;
+		if ( doesFileExist(TAI_CONFIG) ) {
+			print_color("OK\n\n", GREEN);
+		} else {
+			if ( doesFileExist("ur0:tai/config.txt") ) {
+			sprintf(TAI_CONFIG, "ur0:tai/config.txt");	
+			print_color("OK\n\n", GREEN);
+			
+			} else {
+				print_color("Nothing found!!\n\n\n", RED);
+				print_color("\n!!! Please (re)install taiHENkaku first and try again!!!\n\n", RED);
+				goto error_exit;
+			}
 		}
 
 		/// checking Device Activation (needed for PSP games to run -> Adrenaline to run)
@@ -288,7 +298,7 @@ int system_check() {
 		
 		/// Adrenaline installed to a PSP game in tai-config check?? ------- TODO (there could still be an ux0:pspemu/adr.. entry that wont be deleted automatically)
 		printf("Checking ux0:tai/config.txt for adrenaline.. ");
-		get_id_of_psp_game_that_adrenaline_is_installed_to(ADR_FOLDER);
+		get_id_of_psp_game_that_adrenaline_is_installed_to(TAI_CONFIG, ADR_FOLDER);
 			if ( PSP_GAME_ID[0] != '\0' ) { //a config installation was found!!
 
 				printf("%s\n\n", PSP_GAME_ID);
@@ -303,7 +313,7 @@ int system_check() {
 						
 						/// the game was deleted but adrenaline was still installed to it in the tai config.. clean up
 						printf("Deleting old installation for %s.. ", PSP_GAME_ID);
-						if ( delete_adrenaline_from_config(ADR_FOLDER, PSP_GAME_ID) == 0 ) print_color("OK\n\n", GREEN);
+						if ( delete_adrenaline_from_config(TAI_CONFIG, ADR_FOLDER, PSP_GAME_ID) == 0 ) print_color("OK\n\n", GREEN);
 						else print_color("Error\n\n", RED);
 						
 						/// also delete adrenaline prx files although it doesn't matter
@@ -322,7 +332,7 @@ int system_check() {
 					
 					/// delete from the config as the files aren't even installed
 					printf("Removing old entry in ux0:tai/config.txt.. ");
-					int ret = delete_adrenaline_from_config(ADR_FOLDER, PSP_GAME_ID);
+					int ret = delete_adrenaline_from_config(TAI_CONFIG, ADR_FOLDER, PSP_GAME_ID);
 					if ( ret == 0 )	print_color("OK\n\n", GREEN);
 					else print_color("ERROR\n\n", YELLOW);
 					
@@ -940,7 +950,7 @@ void *more_options(char *arg) {
 	}
 	
 	int *option_show_taiconfig() {
-		recovery_draw_textfile("ux0:tai/config.txt", "ux0:tai/config.txt");
+		recovery_draw_textfile(TAI_CONFIG, TAI_CONFIG);
 		return 0;
 	}
 	
@@ -1610,7 +1620,7 @@ void install_adrenaline_files(char *id, char *arg) {
 	
 	/// writing to tai config
 	printf("Editing ux0:tai/config.txt.. ");
-	ret = write_adrenaline_to_config(ADR_FOLDER, id);
+	ret = write_adrenaline_to_config(TAI_CONFIG, ADR_FOLDER, id);
 	if ( ret == 0 )	print_color("OK\n\n", GREEN);	
 	else print_color("ERROR\n\n", RED);	
 	
@@ -1706,7 +1716,7 @@ void change_adrenaline_files(char *id, char *arg, char *arg2, int mode) {
 		
 		/// deleting old installation from tai config
 		printf("Removing old entry in ux0:tai/config.txt.. ");
-		ret = delete_adrenaline_from_config(ADR_FOLDER, PSP_GAME_ID);
+		ret = delete_adrenaline_from_config(TAI_CONFIG, ADR_FOLDER, PSP_GAME_ID);
 		if ( ret == 0 )	print_color("OK\n", GREEN);
 		else print_color("ERROR\n", RED);
 		
@@ -1763,7 +1773,7 @@ void change_adrenaline_files(char *id, char *arg, char *arg2, int mode) {
 		if ( mode == 0) {
 			/// deleting old installation from tai config if not already done in "mode"
 			printf("Editing ux0:tai/config.txt.. ");
-			ret = delete_adrenaline_from_config(ADR_FOLDER, PSP_GAME_ID);
+			ret = delete_adrenaline_from_config(TAI_CONFIG, ADR_FOLDER, PSP_GAME_ID);
 			if ( ret == 0 )	print_color("OK\n", GREEN);
 			else print_color("ERROR\n", RED);
 		}
@@ -1893,7 +1903,7 @@ void change_adrenaline_files(char *id, char *arg, char *arg2, int mode) {
 		
 		/// writing to tai config
 		printf("Editing ux0:tai/config.txt.. ");
-		ret = write_adrenaline_to_config(ADR_FOLDER, id);
+		ret = write_adrenaline_to_config(TAI_CONFIG, ADR_FOLDER, id);
 		if ( ret == 0 )	print_color("OK\n", GREEN);
 		else print_color("ERROR\n", RED);		
 	}
@@ -1999,7 +2009,7 @@ void uninstall_adrenaline_files(char *id) {
 		
 		/// writing to tai config
 		printf("Editing ux0:tai/config.txt.. ");
-		ret = delete_adrenaline_from_config(ADR_FOLDER, id);
+		ret = delete_adrenaline_from_config(TAI_CONFIG, ADR_FOLDER, id);
 		if ( ret == 0 )	print_color("OK\n\n", GREEN);
 		else print_color("ERROR\n\n", RED);
 	

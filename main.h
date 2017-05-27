@@ -27,7 +27,7 @@
 
 #define MAIN_TITLE "Adrenaline EasyInstaller"
 #define TITLEID "ADRINSTAL"
-#define VERSION "1.11"
+#define VERSION "1.12"
 
 #define DEFAULT_BASEGAME "NPEZ00104" //coming with integrated installer
 
@@ -52,6 +52,7 @@ int debug = 0;	//toggle debug mode here
 int ADR_PRX_INSTL = 0;
 int ADR_INSTALLED = 0;
 char ADR_FOLDER[128] = "ux0:adrenaline";
+char TAI_CONFIG[128] = "ux0:tai/config.txt";
 char ADR_VERSION[128] = "unknown";
 
 

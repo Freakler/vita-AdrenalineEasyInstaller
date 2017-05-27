@@ -339,7 +339,7 @@ int download_file(const char *src, const char *dst) { //thx molecule offline ins
 }
 
 
-void get_id_of_psp_game_that_adrenaline_is_installed_to(char *path) { //return PSP GAME ID of which adrenaline is installed to (and save it globally)
+void get_id_of_psp_game_that_adrenaline_is_installed_to(char *taiconfig, char *path) { //return PSP GAME ID of which adrenaline is installed to (and save it globally)
 	
 	char buffer[255];
 	char pathbuff[1024];
@@ -347,7 +347,7 @@ void get_id_of_psp_game_that_adrenaline_is_installed_to(char *path) { //return P
 	
 	static char GAME_ID[32];
 	
-	FILE* config = fopen("ux0:tai/config.txt", "r");
+	FILE* config = fopen(taiconfig, "r");
 	
 	if (config == NULL){
 		if (config != NULL) fclose(config);
@@ -371,13 +371,13 @@ void get_id_of_psp_game_that_adrenaline_is_installed_to(char *path) { //return P
 }
 
 
-int write_adrenaline_to_config(char *path, char *id) {
+int write_adrenaline_to_config(char *taiconfig, char *path, char *id) {
 	
 	char buffer[1024];
 	char pathbuff[1024];
 	
-	FILE *file = fopen("ux0:tai/config.txt", "r");
-	FILE *temp = fopen("ux0:tai/temp.txt", "w");
+	FILE *file = fopen(taiconfig, "r");
+	FILE *temp = fopen("ur0:temp.txt", "w");
 	
 	
 	if (file == NULL){
@@ -414,19 +414,19 @@ int write_adrenaline_to_config(char *path, char *id) {
 	fclose(file);
 	fclose(temp);
 	
-	sceIoRemove("ux0:tai/config.txt");
-	copyFile("ux0:tai/temp.txt", "ux0:tai/config.txt");
-	sceIoRemove("ux0:tai/temp.txt");
+	sceIoRemove(taiconfig);
+	copyFile("ur0:temp.txt", taiconfig);
+	sceIoRemove("ur0:temp.txt");
 	
 	return 0;
 }
 
-int delete_adrenaline_from_config(char *path, char *id) {
+int delete_adrenaline_from_config(char *taiconfig, char *path, char *id) {
 
 	char buffer[1024];
 	char pathbuff[1024];
-	FILE *file = fopen("ux0:tai/config.txt", "r");
-	FILE *temp = fopen("ux0:tai/temp.txt", "w");
+	FILE *file = fopen(taiconfig, "r");
+	FILE *temp = fopen("ur0:temp.txt", "w");
 	
 	
 	if (file == NULL){
@@ -453,9 +453,9 @@ int delete_adrenaline_from_config(char *path, char *id) {
 	fclose(file);
 	fclose(temp);
 	
-	sceIoRemove("ux0:tai/config.txt");
-	copyFile("ux0:tai/temp.txt", "ux0:tai/config.txt");
-	sceIoRemove("ux0:tai/temp.txt");
+	sceIoRemove(taiconfig);
+	copyFile("ur0:temp.txt", taiconfig);
+	sceIoRemove("ur0:temp.txt");
 	
 	return 0;
 }

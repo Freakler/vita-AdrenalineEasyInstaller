@@ -41,9 +41,9 @@ int removePath(char *path);
 
 int download_file(const char *src, const char *dst);
 
-void get_id_of_psp_game_that_adrenaline_is_installed_to(char *path);
-int write_adrenaline_to_config(char *path, char *id);
-int delete_adrenaline_from_config(char *path, char *id);
+void get_id_of_psp_game_that_adrenaline_is_installed_to(char *taiconfig, char *path);
+int write_adrenaline_to_config(char *taiconfig, char *path, char *id);
+int delete_adrenaline_from_config(char *taiconfig, char *path, char *id);
 int check_for_psp_content(char *path);
 
 void trigger_update_database();
