@@ -15,13 +15,17 @@
 /*
 To add a new release:
 - put files in new folder in [files/releases/xxxxxxx]
+  & add them in makefile
 - add entry in "files_menu" (main.c)
-- adjust version in [main.h] [livearea/template.xml]
+- adjust version in [main.h] and [livearea/template.xml]
 - add EasyInstaller changelog to [livearea/changeinfo.xml]
 - add Adrenaline changelog to [files/updatehistory.txt]
 */
 
 /** Changelog
+* v1.13
+* - updated for Adrenaline-4.2
+* 
 * v1.12
 * - adjustments due to latest tai/config.txt location change
 * 
@@ -114,7 +118,8 @@ Menu installer_menu[] = {
 
 Menu files_menu[] = {
 	//*title									//type				//*function				//*arg				//*arg2 					//*message
-	{"2017-04-18 : adrenaline_v4.1.zip"			, MENU_ACTIVE		, draw_psp_games		,"adrenaline_v4.1"	, "ux0:adrenaline"			, ""	},
+	{"2017-06-03 : adrenaline_v4.2.zip"			, MENU_ACTIVE		, draw_psp_games		,"adrenaline_v4.2"	, "ux0:adrenaline"			, ""	},
+	{"2017-05-25 : adrenaline_v4.1.zip"			, MENU_ACTIVE		, draw_psp_games		,"adrenaline_v4.1"	, "ux0:adrenaline"			, ""	},
 	{"2017-04-18 : adrenaline_v4.zip"			, MENU_ACTIVE		, draw_psp_games		,"adrenaline_v4"	, "ux0:adrenaline"			, ""	},
 	{"2017-04-17 : adrenaline_v3.1.zip"			, MENU_ACTIVE		, draw_psp_games		,"adrenaline_v3.1"	, "ux0:adrenaline"			, ""	},
 	{"2017-04-16 : adrenaline_v3_fix.zip"		, MENU_ACTIVE		, draw_psp_games		,"adrenaline_v3_fix", "ux0:adrenaline"			, ""	},
