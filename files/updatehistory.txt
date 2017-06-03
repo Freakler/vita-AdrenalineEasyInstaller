@@ -1,3 +1,7 @@
+ - Changelog v4.2 - [adrenaline_v4.2.zip] (2017-06-03)
+  - Added support for ISO sorting using 'Game Categories Lite' plugin.
+  - Fixed compatiblity with 'Kingdom Hearts: Birth by Sleep' english patch.
+  
  - Changelog v4.1 - [adrenaline_v4.1.zip] (2017-05-25)
   - Fixed bug where holding R trigger while launching Adrenaline didn't open the 
     recovery menu.
