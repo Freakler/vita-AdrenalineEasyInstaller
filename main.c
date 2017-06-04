@@ -1958,7 +1958,7 @@ void createMS0structure() {
 	
 	//ISO folders
 	if ( !doesDirExist("ux0:pspemu/ISO") ) 	makePath("ux0:pspemu/ISO");
-	if ( !doesDirExist("ux0:pspemu/ISO/VIDEO") ) makePath("ux0:pspemu/ISO/VIDEO");
+	///if ( !doesDirExist("ux0:pspemu/ISO/VIDEO") ) makePath("ux0:pspemu/ISO/VIDEO");
 	
 	//Theme folder (.ptf)
 	if ( !doesDirExist("ux0:pspemu/PSP/THEME") ) makePath("ux0:pspemu/PSP/THEME"); 
