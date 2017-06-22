@@ -23,6 +23,9 @@ To add a new release:
 */
 
 /** Changelog
+* v1.15
+* - updated for Adrenaline-5.1
+*
 * v1.14
 * - updated for Adrenaline-5
 * - removed ms0:ISO/video/ folder creation
@@ -122,6 +125,7 @@ Menu installer_menu[] = {
 
 Menu files_menu[] = {
 	//*title									//type				//*function				//*arg				//*arg2 					//*message
+	{"2017-06-21 : adrenaline_v5.1.zip"			, MENU_ACTIVE		, draw_psp_games		,"adrenaline_v5.1"	, "ux0:adrenaline"			, ""	},
 	{"2017-06-05 : adrenaline_v5.zip"			, MENU_ACTIVE		, draw_psp_games		,"adrenaline_v5"	, "ux0:adrenaline"			, ""	},
 	{"2017-06-03 : adrenaline_v4.2.zip"			, MENU_ACTIVE		, draw_psp_games		,"adrenaline_v4.2"	, "ux0:adrenaline"			, ""	},
 	{"2017-05-25 : adrenaline_v4.1.zip"			, MENU_ACTIVE		, draw_psp_games		,"adrenaline_v4.1"	, "ux0:adrenaline"			, ""	},
