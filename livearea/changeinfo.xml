@@ -97,4 +97,9 @@
 - removed ms0:ISO/video/ folder creation<br>
     ]]>
   </changes>
+  <changes app_ver="01.15">
+    <![CDATA[
+- updated for Adrenaline-5.1<br>
+    ]]>
+  </changes>
 </changeinfo>
