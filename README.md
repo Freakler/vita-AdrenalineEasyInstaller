@@ -1,4 +1,4 @@
-# vita-AdrenalineEasyInstaller
+# AdrenalineEasyInstaller
 An EasyInstaller for the 6.61 Adrenaline eCFW by TheFloW
 
 *You can install and switch between all versions from 1.0 up to 5.1 that are in plugin format!*
